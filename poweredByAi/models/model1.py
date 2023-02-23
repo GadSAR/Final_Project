@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
+from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
 
 global model_1
 
@@ -58,8 +59,8 @@ def model1_structure(input_size):
     # Print the model summary
     model_1.summary()
 
-    # Save model structure
-    model_1.save('../generated/model1_structure.h5')
+    # Save the model structure
+    model1_save_structure()
 
 
 def model1_train(x_train1, x_test1, y_train1, y_test1):
@@ -84,7 +85,30 @@ def model1_train(x_train1, x_test1, y_train1, y_test1):
     plt.legend()
     plt.show()
 
-    y_pred = model_1.predict(x_test1)
+    model1_predict(x_test1)
+
+
+def model1_predict(x_pred):
+    y_pred = model_1.predict(x_pred)
     y_pred = np.round(y_pred).astype(int)
     print(y_pred)
 
+    return y_pred
+
+
+def model1_save_structure():
+    model_save_structure('model1_structure.h5', model_1, 1)
+
+
+def model1_save_weights():
+    model_save_weights('model1_structure.hdf5', model_1, 1)
+
+
+def model1_load_structure():
+    global model_1
+    model_1 = model_load_structure(model_1, 1)
+
+
+def model1_load_weights():
+    global model_1
+    model_1 = model_load_weights(model_1, 1)

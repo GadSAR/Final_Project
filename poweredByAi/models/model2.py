@@ -14,6 +14,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
+from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
 
 global model_2
 
@@ -101,3 +102,20 @@ def model2_train(x_train2, x_test2, y_train2, y_test2):
     y_pred = model_2.predict(x_test2)
     print(y_pred)
 
+
+def model2_save_structure():
+    model_save_structure('model1_structure.h5', model_2, 2)
+
+
+def model2_save_weights():
+    model_save_weights('model1_structure.hdf5', model_2, 2)
+
+
+def model2_load_structure():
+    global model_2
+    model_2 = model_load_structure(model_2, 2)
+
+
+def model2_load_weights():
+    global model_2
+    model_2 = model_load_weights(model_2, 2)
