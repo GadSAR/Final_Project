@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<!-- inorder to use thymeleaf th: we have to add in <html xmlns:th="https://www.thymeleaf.org"-->
+
+<head>
+    <div th:replace="~{header :: header}"></div>
+</head>
+<body>
+<!-- navbar -->
+<div th:replace="~{header :: nav_header}"></div>
+<br><br><br><br><br><br><br><br>
+<div class="container justify-content-center card">
+    <h3 class="text-center"></h3>
+
+    <a th:href="@{/getStudents}">
+        <h1>Hello, and Welcome to FleetManagement System</h1>
+    </a>
+    <h2>
+    <p>Please select an option</p>
+    <ol>
+        <li><a href="allInfos.html" th:href="@{/getStudents}">FleetManagement List</a></li>
+        <li><a href="addStudent.html" th:href="@{/students/new}">Add New Obd2Scanner</a></li>
+    </ol>
+    </h2>
+</div>
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

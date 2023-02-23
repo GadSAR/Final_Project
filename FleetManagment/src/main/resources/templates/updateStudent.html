@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
+<!-- <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=windows-1255" /> -->
+<head>
+    <div th:replace="~{header :: header}"></div>
+</head>
+<body style="background-color:powderblue;">
+<!--style="background-color:powderblue;"-->
+
+<!-- navbar -->
+<div th:replace="~{header :: nav_header}"></div>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <!-- support different devices" large device , medium device, small device, and align to center, card=add border -->
+        <div class="col-md-6 container justify-content-center card">
+            <h3 class="text-center">Edit Student</h3>
+            <div class="card-body">
+                <!-- define action for this column -->
+                <!-- to access the info object we are using th:object="${info}" -->
+                <form th:action="@{/students/{id} (id=${info.id})}" th:object="${info}" method="post"
+                      enctype="multipart/form-data" style="background-color:#FCEAEA">
+
+                    <div th:replace="~{updateSaveFields :: input_fields}"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset=" UTF-8">
+    <title>Student Management System</title>
+    <!-- bootstrap 4 cdn will import automatically from internet-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- get style from .\static\style.css file -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- navbar of bootstrap -->
+<div th:fragment="nav_header">
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" th:text="${title}" href="#">Management System</a>
+
+        <!-- Toggle/collapsible Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:text="${title_link_1}" th:href="@{/getStudents}">Students List</a>
+                </li>
+
+            </ul>
+        </div>
+</nav>
+</div>
+</body>
+</html>
