@@ -73,8 +73,7 @@ def model2_structure(input_size, output_size):
     model_2.summary()
 
     # Save model structure
-    model_2.save('../generated/model2_structure.h5')
-
+    model2_save_structure()
 
 def model2_train(x_train2, x_test2, y_train2, y_test2):
     # Get the number of categories
@@ -87,7 +86,7 @@ def model2_train(x_train2, x_test2, y_train2, y_test2):
     history2 = model_2.fit(np.expand_dims(x_train2, axis=2), y_train2, epochs=100, batch_size=32, verbose=1)
 
     # Save model weights
-    model_2.save_weights('../generated/model2_weights.hdf5')
+    model2_save_weights()
 
     # Evaluate the performance of the model
     loss2, accuracy2 = model_2.evaluate(np.expand_dims(x_test2, axis=2), y_test2)
@@ -104,11 +103,11 @@ def model2_train(x_train2, x_test2, y_train2, y_test2):
 
 
 def model2_save_structure():
-    model_save_structure('model1_structure.h5', model_2, 2)
+    model_save_structure('model1_structure', model_2, 2)
 
 
 def model2_save_weights():
-    model_save_weights('model1_structure.hdf5', model_2, 2)
+    model_save_weights('model1_structure', model_2, 2)
 
 
 def model2_load_structure():

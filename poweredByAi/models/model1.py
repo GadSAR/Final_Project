@@ -71,7 +71,7 @@ def model1_train(x_train1, x_test1, y_train1, y_test1):
     history1 = model_1.fit(x_train1, y_train1, epochs=100, batch_size=32, verbose=1, validation_data=(x_test1, y_test1))
 
     # Save weights
-    model_1.save_weights('../generated/model1_weights.hdf5')
+    model1_save_weights()
 
     # Evaluate the performance of the model
     loss1, accuracy1 = model_1.evaluate(x_test1, y_test1)
@@ -97,11 +97,11 @@ def model1_predict(x_pred):
 
 
 def model1_save_structure():
-    model_save_structure('model1_structure.h5', model_1, 1)
+    model_save_structure('model1_structure', model_1, 1)
 
 
 def model1_save_weights():
-    model_save_weights('model1_structure.hdf5', model_1, 1)
+    model_save_weights('model1_structure', model_1, 1)
 
 
 def model1_load_structure():

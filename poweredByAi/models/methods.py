@@ -49,8 +49,8 @@ def model_save_structure(file_name, model, model_id):
         file_data = file.read()
 
     # Insert the file contents into the database
-    sql = "INSERT INTO files (name, data) VALUES (%s, %s)"
-    val = (file_name, file_data)
+    sql = "INSERT INTO files (name, data, id) VALUES (%s, %s, %d)"
+    val = (file_name, file_data, model_id)
     my_cursor.execute(sql, val)
 
     mydb.commit()
