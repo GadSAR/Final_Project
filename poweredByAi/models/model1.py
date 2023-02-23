@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 
 # For model 1
 import tensorflow as tf
+from tensorflow.keras.models import load_model
 from sklearn.model_selection import train_test_split
 
 from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
@@ -18,11 +19,19 @@ from models.methods import model_save_structure, model_load_structure, model_loa
 global model_1
 
 
-def model1(data):
+def model1(data, epochs):
     x1, y1 = model1_data(data)
     x_train1, x_test1, y_train1, y_test1 = model1_split_data(x1, y1)
-    model1_train(x_train1, x_test1, y_train1, y_test1)
+    model1_train(x_train1, x_test1, y_train1, y_test1, epochs)
 
+def model1_check(data):
+    x1, y1 = model1_data(data)
+    x_train1, x_test1, y_train1, y_test1 = model1_split_data(x1, y1)
+    global model_1
+    model_1 = load_model('../generated/backup/model1_structure.h5')
+
+    model_1.load_weights('../generated/backup/model1_weights.hdf5')
+    model1_accuracy(x_test1, y_test1)
 
 def model1_data(data):
     # Organize the data into x1, y1
@@ -63,19 +72,23 @@ def model1_structure(input_size):
     model1_save_structure()
 
 
-def model1_train(x_train1, x_test1, y_train1, y_test1):
+def model1_accuracy(x, y):
+    # Evaluate the performance of the model
+    loss1, accuracy1 = model_1.evaluate(x, y)
+    print('Accuracy:', accuracy1)
+
+
+def model1_train(x_train1, x_test1, y_train1, y_test1, epochs):
     # Build model structure
     model1_structure(x_train1.shape[1])
 
     # Train the model
-    history1 = model_1.fit(x_train1, y_train1, epochs=100, batch_size=32, verbose=1, validation_data=(x_test1, y_test1))
+    history1 = model_1.fit(x_train1, y_train1, epochs=epochs, batch_size=32, verbose=1, validation_data=(x_test1, y_test1))
 
     # Save weights
     model1_save_weights()
 
-    # Evaluate the performance of the model
-    loss1, accuracy1 = model_1.evaluate(x_test1, y_test1)
-    print('Accuracy:', accuracy1)
+    model1_accuracy(x_test1, y_test1)
 
     # Plot the training and validation loss and accuracy
     plt.plot(history1.history['loss'], label='train_loss')
@@ -97,11 +110,11 @@ def model1_predict(x_pred):
 
 
 def model1_save_structure():
-    model_save_structure('model1_structure', model_1, 1)
+    model_save_structure('model1_structure.h5', model_1, 1)
 
 
 def model1_save_weights():
-    model_save_weights('model1_structure', model_1, 1)
+    model_save_weights('model1_weights.hdf5', model_1, 1)
 
 
 def model1_load_structure():

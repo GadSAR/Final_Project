@@ -5,8 +5,8 @@
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-from test.models import get_data
-from models.model1 import model1
+from models.methods import get_data
+from models.model1 import model1, model1_check
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     data = get_data()
 
     # Start model
-    model1(data)
+    model1_check(data)
 
 
 if __name__ == '__main__':

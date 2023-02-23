@@ -13,17 +13,26 @@ from matplotlib import pyplot as plt
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
+from tensorflow.keras.models import load_model
 
 from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
 
 global model_2
 
 
-def model2(data):
+def model2(data, epochs):
     x2, y2 = model2_data(data)
     x_train2, x_test2, y_train2, y_test2 = model2_split_data(x2, y2)
-    model2_train(x_train2, x_test2, y_train2, y_test2)
+    model2_train(x_train2, x_test2, y_train2, y_test2, epochs)
 
+
+def model2_check(data):
+    x2, y2 = model2_data(data)
+    x_train2, x_test2, y_train2, y_test2 = model2_split_data(x2, y2)
+    global model_2
+    model_2 = load_model('../generated/backup/model2_structure.h5')
+    model_2.load_weights('../generated/backup/model2_weights.hdf5')
+    model2_accuracy(x_test2, y_test2)
 
 def model2_data(data):
     # Filter the dataset to include only rows where "issues" equals 1
@@ -75,7 +84,14 @@ def model2_structure(input_size, output_size):
     # Save model structure
     model2_save_structure()
 
-def model2_train(x_train2, x_test2, y_train2, y_test2):
+
+def model2_accuracy(x, y):
+    # Evaluate the performance of the model
+    loss2, accuracy2 = model_2.evaluate(np.expand_dims(x, axis=2), y)
+    print('Accuracy:', accuracy2)
+
+
+def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
     # Get the number of categories
     num_categories = len(np.unique(y_train2))
 
@@ -83,14 +99,12 @@ def model2_train(x_train2, x_test2, y_train2, y_test2):
     model2_structure(x_train2.shape[1], num_categories)
 
     # Train the model
-    history2 = model_2.fit(np.expand_dims(x_train2, axis=2), y_train2, epochs=100, batch_size=32, verbose=1)
+    history2 = model_2.fit(np.expand_dims(x_train2, axis=2), y_train2, epochs=epochs, batch_size=32, verbose=1)
 
     # Save model weights
     model2_save_weights()
 
-    # Evaluate the performance of the model
-    loss2, accuracy2 = model_2.evaluate(np.expand_dims(x_test2, axis=2), y_test2)
-    print('Accuracy:', accuracy2)
+    model2_accuracy(x_test2, y_test2)
 
     # Plot the training and validation loss and accuracy
     plt.plot(history2.history['loss'], label='train_loss')
@@ -103,11 +117,11 @@ def model2_train(x_train2, x_test2, y_train2, y_test2):
 
 
 def model2_save_structure():
-    model_save_structure('model1_structure', model_2, 2)
+    model_save_structure('model2_structure.h5', model_2, 2)
 
 
 def model2_save_weights():
-    model_save_weights('model1_structure', model_2, 2)
+    model_save_weights('model2_weights.hdf5', model_2, 2)
 
 
 def model2_load_structure():

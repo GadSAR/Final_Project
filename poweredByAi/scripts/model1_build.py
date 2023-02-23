@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-from test.models import get_data
+from models.methods import get_data
 from models.model1 import model1
 
 
@@ -14,9 +14,9 @@ def main():
     data = get_data()
 
     # Start model
-    model1(data)
+    epochs = 100
+    model1(data, epochs)
 
 
 if __name__ == '__main__':
     main()
-

@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-from test.models import get_data
+from models.methods import get_data
 from models.model3 import model3
 
 

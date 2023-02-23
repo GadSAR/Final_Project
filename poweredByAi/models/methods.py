@@ -5,8 +5,9 @@
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-import mysql
+import mysql.connector
 import pandas as pd
+from datetime import datetime
 
 
 def connect_to_database(database_name):
@@ -38,19 +39,20 @@ def get_data():
 
 def model_save_structure(file_name, model, model_id):
     # Save the model structure locally
-    model.save('../generated/' + file_name + '.h5')
+    file_path = '../generated/' + file_name
+    model.save(file_path)
 
     # Save the model structure in the database
-    mydb = connect_to_database()
+    mydb = connect_to_database("obd2_models")
     my_cursor = mydb.cursor()
 
     # Open the file in binary mode and read its contents
-    with open(file_name, 'rb') as file:
+    with open(file_path, 'rb') as file:
         file_data = file.read()
 
     # Insert the file contents into the database
-    sql = "INSERT INTO files (name, data, id) VALUES (%s, %s, %d)"
-    val = (file_name, file_data, model_id)
+    sql = "INSERT INTO models_structures VALUES (%s, %s, %s, %s)"
+    val = (file_name, file_data, model_id, get_time())
     my_cursor.execute(sql, val)
 
     mydb.commit()
@@ -62,19 +64,20 @@ def model_save_structure(file_name, model, model_id):
 
 def model_save_weights(file_name, model, model_id):
     # Save the model structure locally
-    model.save_weights('../generated/' + file_name + '.hdf5')
+    file_path = '../generated/' + file_name
+    model.save_weights(file_path)
 
     # Save the model structure in the database
     mydb = connect_to_database("obd2_models")
     my_cursor = mydb.cursor()
 
     # Open the file in binary mode and read its contents
-    with open(file_name, 'rb') as file:
+    with open(file_path, 'rb') as file:
         file_data = file.read()
 
     # Insert the file contents into the database
-    sql = "INSERT INTO weights_files (name, data, id) VALUES (%s, %s , %d)"
-    val = (file_name, file_data, model_id)
+    sql = "INSERT INTO models_weights VALUES (%s, %s, %s, %s)"
+    val = (file_name, file_data, model_id, get_time())
     my_cursor.execute(sql, val)
 
     mydb.commit()
@@ -91,7 +94,7 @@ def model_load_weights(model, model_id):
 
     # Select the file from the database
     file_name = 'model' + model_id + '_weights.hdf5'
-    sql = "SELECT weights_files FROM files WHERE name = %s"
+    sql = "SELECT * FROM models_weights WHERE _id = %d ORDER BY ABS(TIMESTAMPDIFF(SECOND, time, current_time)) LIMIT 1"
     my_cursor.execute(sql, file_name)
 
     my_result = my_cursor.fetchone()
@@ -114,8 +117,8 @@ def model_load_structure(model, model_id):
 
     # Select the file from the database
     file_name = 'model' + model_id + '_structure.h5'
-    sql = "SELECT data FROM files WHERE name = %s"
-    my_cursor.execute(sql, file_name)
+    sql = "SELECT * FROM models_structures WHERE _id = %d ORDER BY ABS(TIMESTAMPDIFF(SECOND, time, current_time)) LIMIT 1"
+    my_cursor.execute(sql, model_id)
 
     my_result = my_cursor.fetchone()
 
@@ -128,3 +131,13 @@ def model_load_structure(model, model_id):
     mydb.close()
 
     return model
+
+
+def get_time():
+    # Get the current date and time
+    now = datetime.now()
+
+    # Format the date and time as a string that MySQL can understand
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+
+    return formatted_date

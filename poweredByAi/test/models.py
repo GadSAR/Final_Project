@@ -267,7 +267,7 @@ def get_data():
 
     my_cursor = mydb.cursor()
 
-    my_cursor.execute("SELECT * FROM obd2scannerdata")
+    my_cursor.execute("SELECT * FROM obd2data")
 
     my_result = my_cursor.fetchall()
 
