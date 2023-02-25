@@ -278,13 +278,13 @@ def get_data():
 
 def main():
     # Load the dataset
-    data = get_data()
-    # data = pd.read_csv('obd2data.csv')
+    #data = get_data()
+    data = pd.read_csv('obd2data.csv')
 
     # Start models
-    model1(data)
+    #model1(data)
     model2(data)
-    model3(data)
+    #model3(data)
 
     # model_2.load_weights('model2_weights.hdf5')
     # model_2.scripts()

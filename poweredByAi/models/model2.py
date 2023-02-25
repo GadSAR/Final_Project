@@ -7,12 +7,13 @@
 
 # For organizing the data
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 
 # For model 2
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, MultiLabelBinarizer
 from tensorflow.keras.models import load_model
 
 from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
@@ -34,24 +35,19 @@ def model2_check(data):
     model_2.load_weights('../generated/backup/model2_weights.hdf5')
     model2_accuracy(x_test2, y_test2)
 
+
 def model2_data(data):
     # Filter the dataset to include only rows where "issues" equals 1
     x2 = data[data['issues'] == 1].copy()
 
     # Make a y data based on X
     temp_y2 = x2['trouble_codes'].values
-
-    # One-hot encode the labels
-    one_hot_encoder = OneHotEncoder(sparse=False)
-    temp_y2 = one_hot_encoder.fit_transform(temp_y2.reshape(-1, 1))
-    y2 = np.argmax(temp_y2, axis=1)  # Convert one-hot encoded labels to integer labels
+    temp_y2_df = pd.DataFrame(temp_y2, columns=['trouble_codes'])
+    mlb = MultiLabelBinarizer()
+    y2 = pd.DataFrame(mlb.fit_transform(temp_y2_df['trouble_codes'].str.split(',')), columns=mlb.classes_)
 
     # Drop the columns that we don't need
     x2.drop(['issues', 'trouble_codes', 'time', 'vehicle_id', 'id', 'ip'], axis=1, inplace=True)
-
-    # Print
-    print(x2)
-    print(y2)
 
     return x2, y2
 
@@ -69,14 +65,14 @@ def model2_structure(input_size, output_size):
     model_2 = tf.keras.Sequential([
         tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(128, return_sequences=True),
                                       input_shape=(input_size, 1)),
-        tf.keras.layers.Dropout(0.2),
         tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64)),
         tf.keras.layers.Dropout(0.2),
         tf.keras.layers.Dense(output_size, activation='softmax')
     ])
 
     # Compile the model
-    model_2.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model_2.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4)
+, metrics=['accuracy'])
 
     # Print the model summary
     model_2.summary()
@@ -93,17 +89,18 @@ def model2_accuracy(x, y):
 
 def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
     # Get the number of categories
-    num_categories = len(np.unique(y_train2))
+    num_categories = y_train2.shape[1]
 
     # Build model structure
     model2_structure(x_train2.shape[1], num_categories)
 
     # Train the model
-    history2 = model_2.fit(np.expand_dims(x_train2, axis=2), y_train2, epochs=epochs, batch_size=32, verbose=1)
+    history2 = model_2.fit(x_train2, y_train2, epochs=epochs, batch_size=32, verbose=1, validation_data=(x_test2, y_test2))
 
     # Save model weights
     model2_save_weights()
 
+    # Check model accuracy
     model2_accuracy(x_test2, y_test2)
 
     # Plot the training and validation loss and accuracy

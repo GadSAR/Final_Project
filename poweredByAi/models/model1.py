@@ -57,8 +57,8 @@ def model1_structure(input_size):
     global model_1
     model_1 = tf.keras.Sequential([
         tf.keras.layers.Dense(64, input_shape=(input_size,), activation='relu'),
-        tf.keras.layers.Dropout(0.2),
         tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dropout(0.2),
         tf.keras.layers.Dense(1, activation='sigmoid')
     ])
 
