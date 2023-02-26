@@ -31,7 +31,8 @@ def model2_check(data):
     x2, y2 = model2_data(data)
     x_train2, x_test2, y_train2, y_test2 = model2_split_data(x2, y2)
     global model_2
-    model_2 = load_model('../generated/backup/model2_structure.h5')
+    #model_2 = load_model('../generated/backup/model2_structure.h5')
+    model_2 = model_load_structure(2)
     model_2.load_weights('../generated/backup/model2_weights.hdf5')
     model2_accuracy(x_test2, y_test2)
 
@@ -105,7 +106,9 @@ def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
 
     # Plot the training and validation loss and accuracy
     plt.plot(history2.history['loss'], label='train_loss')
+    plt.plot(history2.history['val_loss'], label='val_loss')
     plt.plot(history2.history['accuracy'], label='train_acc')
+    plt.plot(history2.history['val_accuracy'], label='val_acc')
     plt.legend()
     plt.show()
 
