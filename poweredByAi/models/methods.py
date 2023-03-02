@@ -11,6 +11,7 @@ from datetime import datetime
 import tempfile
 import io
 
+from matplotlib import pyplot as plt
 from tensorflow.keras.models import load_model
 
 
@@ -97,20 +98,19 @@ def model_load_weights(model, model_id):
     my_cursor = mydb.cursor()
 
     # Select the file from the database
-    file_name = 'model' + model_id + '_weights.hdf5'
     sql = """
     SELECT data FROM models_weights
     WHERE model_id = %s
     ORDER BY ABS(TIMEDIFF(time, NOW()))
     LIMIT 1
-"""
+    """
     my_cursor.execute(sql, (model_id,))
 
     model_file = io.BytesIO(my_cursor.fetchone()[0])
     with tempfile.NamedTemporaryFile(suffix=".hdf5", delete=False) as f:
         f.write(model_file.getvalue())
         temp_model_path = f.name
-        model = load_model(temp_model_path)
+        model.load_weights(temp_model_path)
 
     mydb.close()
 
@@ -151,3 +151,14 @@ def get_time():
     formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
 
     return formatted_date
+
+
+def model_plot(history):
+    # Plot the training and validation loss and accuracy
+    plt.plot(history.history['loss'], label='train_loss')
+    plt.plot(history.history['val_loss'], label='val_loss')
+    plt.plot(history.history['accuracy'], label='train_acc')
+    plt.plot(history.history['val_accuracy'], label='val_acc')
+    plt.legend()
+    plt.show()
+    plt.savefig()

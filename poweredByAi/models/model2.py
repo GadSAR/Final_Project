@@ -13,10 +13,9 @@ from matplotlib import pyplot as plt
 # For model 2
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder, MultiLabelBinarizer
-from tensorflow.keras.models import load_model
+from sklearn.preprocessing import MultiLabelBinarizer
 
-from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
+from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights, model_plot
 
 global model_2
 
@@ -31,10 +30,11 @@ def model2_check(data):
     x2, y2 = model2_data(data)
     x_train2, x_test2, y_train2, y_test2 = model2_split_data(x2, y2)
     global model_2
-    #model_2 = load_model('../generated/backup/model2_structure.h5')
-    model_2 = model_load_structure(2)
-    model_2.load_weights('../generated/backup/model2_weights.hdf5')
+    model2_load_structure()
+    model2_load_weights()
     model2_accuracy(x_test2, y_test2)
+    model2_predict(x_test2)
+    print(y_test2)
 
 
 def model2_data(data):
@@ -88,6 +88,14 @@ def model2_accuracy(x, y):
     print('Accuracy:', accuracy2)
 
 
+def model2_predict(x_pred):
+    y_pred = model_2.predict(x_pred)
+    y_pred = np.round(y_pred).astype(int)
+    print(y_pred)
+
+    return y_pred
+
+
 def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
     # Get the number of categories
     num_categories = y_train2.shape[1]
@@ -104,13 +112,7 @@ def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
     # Check model accuracy
     model2_accuracy(x_test2, y_test2)
 
-    # Plot the training and validation loss and accuracy
-    plt.plot(history2.history['loss'], label='train_loss')
-    plt.plot(history2.history['val_loss'], label='val_loss')
-    plt.plot(history2.history['accuracy'], label='train_acc')
-    plt.plot(history2.history['val_accuracy'], label='val_acc')
-    plt.legend()
-    plt.show()
+    model_plot(history2)
 
     y_pred = model_2.predict(x_test2)
     print(y_pred)
@@ -126,7 +128,7 @@ def model2_save_weights():
 
 def model2_load_structure():
     global model_2
-    model_2 = model_load_structure(model_2, 2)
+    model_2 = model_load_structure(2)
 
 
 def model2_load_weights():

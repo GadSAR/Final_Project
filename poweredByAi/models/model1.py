@@ -11,10 +11,10 @@ from matplotlib import pyplot as plt
 
 # For model 1
 import tensorflow as tf
-from tensorflow.keras.models import load_model
 from sklearn.model_selection import train_test_split
 
-from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights
+from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights, \
+    model_plot
 
 global model_1
 
@@ -24,23 +24,22 @@ def model1(data, epochs):
     x_train1, x_test1, y_train1, y_test1 = model1_split_data(x1, y1)
     model1_train(x_train1, x_test1, y_train1, y_test1, epochs)
 
+
 def model1_check(data):
     x1, y1 = model1_data(data)
     x_train1, x_test1, y_train1, y_test1 = model1_split_data(x1, y1)
     global model_1
-    model_1 = load_model('../generated/backup/model1_structure.h5')
-
-    model_1.load_weights('../generated/backup/model1_weights.hdf5')
+    model1_load_structure()
+    model1_load_weights()
     model1_accuracy(x_test1, y_test1)
+    model1_predict(x_test1)
+    print(y_test1)
+
 
 def model1_data(data):
     # Organize the data into x1, y1
     x1 = data.drop(['issues', 'trouble_codes', 'time', 'vehicle_id', 'id', 'ip'], axis=1).values
     y1 = data['issues'].values
-
-    # Print
-    print(x1)
-    print(y1)
 
     return x1, y1
 
@@ -83,20 +82,15 @@ def model1_train(x_train1, x_test1, y_train1, y_test1, epochs):
     model1_structure(x_train1.shape[1])
 
     # Train the model
-    history1 = model_1.fit(x_train1, y_train1, epochs=epochs, batch_size=32, verbose=1, validation_data=(x_test1, y_test1))
+    history1 = model_1.fit(x_train1, y_train1, epochs=epochs, batch_size=32, verbose=1,
+                           validation_data=(x_test1, y_test1))
 
     # Save weights
     model1_save_weights()
 
     model1_accuracy(x_test1, y_test1)
 
-    # Plot the training and validation loss and accuracy
-    plt.plot(history1.history['loss'], label='train_loss')
-    plt.plot(history1.history['val_loss'], label='val_loss')
-    plt.plot(history1.history['accuracy'], label='train_acc')
-    plt.plot(history1.history['val_accuracy'], label='val_acc')
-    plt.legend()
-    plt.show()
+    model_plot(history1)
 
     model1_predict(x_test1)
 
@@ -119,7 +113,7 @@ def model1_save_weights():
 
 def model1_load_structure():
     global model_1
-    model_1 = model_load_structure(model_1, 1)
+    model_1 = model_load_structure(1)
 
 
 def model1_load_weights():

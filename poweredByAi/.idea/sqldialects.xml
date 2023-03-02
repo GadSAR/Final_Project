@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0310b58f-e363-4afe-aec9-082eaa1c1171/console_3.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/models/methods.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test/models.py" dialect="GenericSQL" />
   </component>
 </project>
