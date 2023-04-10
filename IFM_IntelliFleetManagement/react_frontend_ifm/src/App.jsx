@@ -71,7 +71,7 @@ const App = () => {
 
               <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} handleLoggedOut={handleLoggedOut}/>
 
-              <div style={{
+              <div classname="mt-8 pb-8" style={{
                   minHeight: `calc(100vh - 64px - ${theme.spacing(8)}px)`,
                   marginTop: theme.spacing(8),
                   paddingBottom: theme.spacing(8),
