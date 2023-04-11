@@ -2,17 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CarCanva } from '../canvas';
 
-
 const Home = () => {
-
-
   return (
     <div className="flex flex-col items-center">
-      <CarCanva />
-      <h1 className="text-4xl font-bold my-8 text-center">
+      <div className="mt-8">
+        <CarCanva />
+      </div>
+      <h1 className="text-4xl sd:text-2xl font-bold my-8 text-center">
         Welcome to Fleet Management
       </h1>
-      <p className="text-lg mb-8 text-center">
+      <p className="text-xl sd:text-0.5xl mb-8 text-center">
         Manage your fleet with ease using our advanced fleet management system.
       </p>
       <Link

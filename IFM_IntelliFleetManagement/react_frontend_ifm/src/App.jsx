@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {AuthService, PrivateRoute} from './utils';
+import {AuthService} from './utils';
 import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict, Navbar, Footer } from './components';
 
 const App = () => {
@@ -71,7 +71,7 @@ const App = () => {
 
               <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} handleLoggedOut={handleLoggedOut}/>
 
-              <div classname="mt-8 pb-8" style={{
+              <div className="mt-8 pb-8" style={{
                   minHeight: `calc(100vh - 64px - ${theme.spacing(8)}px)`,
                   marginTop: theme.spacing(8),
                   paddingBottom: theme.spacing(8),

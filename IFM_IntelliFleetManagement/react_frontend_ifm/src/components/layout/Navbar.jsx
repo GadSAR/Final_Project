@@ -22,7 +22,7 @@ const Navbar = (props) => {
         <AppBar>
             <Toolbar>
                 <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    <NavLink style={{ textDecoration: "none", color: "inherit" }} to="/">My Fleet Management System</NavLink>
+                    <NavLink style={{ textDecoration: "none", color: "inherit" }} to="/">Welcome to "IFM"</NavLink>
                 </Typography>
                 <Switch checked={props.darkMode} onChange={props.toggleDarkMode} />
                 <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuClick}>
