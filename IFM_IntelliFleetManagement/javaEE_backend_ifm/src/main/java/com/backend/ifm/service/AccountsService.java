@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @Service
@@ -24,7 +25,7 @@ public class AccountsService {
         name, 
         email, 
         passwordEncoder.encode(password),
-        Arrays.asList(new Role(role)));
+                List.of(new Role(role)));
         userRepository.save(user);
     }
 

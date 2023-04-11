@@ -23,18 +23,13 @@ public class BackendIfmApplication implements CommandLineRunner  {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-
     public static void main(String[] args) {
         SpringApplication.run(BackendIfmApplication.class, args);
     }
 
-
     @Override
-    public void run(String... args) throws Exception {
-         /*
-        at first use of the app, if no user table exists then create admin user with:
-        'admin@gmail.com' username and 'admin' password
-                */
+    public void run(String... args) {
+
         Role role = roleRepository.findByName("ROLE_USER");
         if (role == null) {
             User user = new User("admin user", "admin@gmail.com",

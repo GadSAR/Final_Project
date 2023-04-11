@@ -11,22 +11,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// Lombok's annotations for generating getter and setter methods for the class properties
 @Getter
 @Setter
-// Lombok's annotation for generating a no-arguments constructor
 @NoArgsConstructor
 public class AuthenticationResponse {
 
-    // Instance variable for the access token (JWT token) of the user
     private String accessToken;
 
-    // Constructor with an argument for the access token
     public AuthenticationResponse(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    // Getter method for the JWT token, which is the same as the access token
     public String getJwtToken() {
         return this.accessToken;
     }
