@@ -116,8 +116,7 @@ const Login = (props) => {
                 </div>
             </Grid>
         </Grid>
-    )
-        ;
+    );
 };
 
 export default Login;
