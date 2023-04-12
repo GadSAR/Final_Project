@@ -15,7 +15,7 @@ const Car = ({ isMobile }) => {
 
   return useMemo(() => (
     <mesh>
-      <hemisphereLight intensity={0.15} groundColor='black' />
+      <hemisphereLight intensity={0.5} color='white' />
       <spotLight
         position={[-20, 50, 10]}
         angle={0}
@@ -24,7 +24,7 @@ const Car = ({ isMobile }) => {
         castShadow
         shadow-mapSize={1024}
       />
-      <pointLight intensity={1} />
+      <pointLight intensity={2} />
       <primitive
         object={car.scene}
         scale={isMobile ? 0.05 : 0.05}

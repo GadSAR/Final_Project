@@ -13,13 +13,13 @@ import com.backend.ifm.entity.Role;
 
 @Component
 public class JwtUtil {
-    private String SECRET_KEY = "your-secret-key";
-    private long TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
+    private final String SECRET_KEY = "your-secret-key";
 
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getName());
         claims.put("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
 
+        long TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

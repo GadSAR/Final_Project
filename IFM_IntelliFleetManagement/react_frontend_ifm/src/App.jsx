@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {AuthService} from './utils';
-import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict, Navbar, Footer } from './components';
+import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Navbar, Footer } from './components';
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -26,6 +26,8 @@ const App = () => {
           console.error('Login error:', error);
         }
       );
+      return <Navigate to='/' replace={true} />
+
   };
 
   const handleLoggedOut = () => {
@@ -43,7 +45,7 @@ const App = () => {
           type: darkMode ? 'dark' : 'light',
           background: {
               default: darkMode ? '#1a1c1e' : '#f5f5f5',
-              paper: darkMode ? '#1a1c1e' : '#ffffff',
+              paper: darkMode ? '#1a1c1e' : '#f5f5f5',
           },
       }
   });
