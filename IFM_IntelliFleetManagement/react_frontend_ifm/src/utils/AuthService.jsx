@@ -5,16 +5,23 @@ const currentIP = window.location.hostname;
 const API_URL = `http://${currentIP}:8080/ifm_api`;
 
 class AuthService {
-  login(username, password) {
-    return axios
-      .post(`${API_URL}/auth/login`, { username, password })
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        }
+  
+  async login(username, password) {
+    const response = await axios
+      .post(`${API_URL}/auth/login`, { username, password });
+    if (response.data.accessToken) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+    }
+    return response.data;
+  }
 
-        return response.data;
-      });
+  async registerAdmin(username, company, email, password) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/registerAdmin`, { username, company, email, password });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error during registration: ${error.message}`);
+    }
   }
 
   logout() {
