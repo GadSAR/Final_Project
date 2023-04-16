@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,} from '@material-ui/core';
+import {
+    Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
+    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
 
@@ -128,7 +130,7 @@ const Admin = () => {
     };
 
     useEffect(() => {
-// fetch the list of users from the server on initial render
+        // fetch the list of users from the server on initial render
         fetch('${API_URL}/users')
             .then((res) => res.json())
             .then((result) => {
@@ -178,14 +180,14 @@ const Admin = () => {
                                         className={classes.editButton}
                                         onClick={() => handleEdit(user)}
                                     >
-                                        <Edit/>
+                                        <Edit />
                                     </IconButton>
                                     <IconButton
                                         aria-label="delete"
                                         className={classes.deleteButton}
                                         onClick={() => handleDelete(user.id)}
                                     >
-                                        <Delete/>
+                                        <Delete />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>

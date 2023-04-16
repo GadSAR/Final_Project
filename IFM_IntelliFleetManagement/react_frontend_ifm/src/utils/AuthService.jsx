@@ -6,9 +6,9 @@ const API_URL = `http://${currentIP}:8080/ifm_api`;
 
 class AuthService {
   
-  async login(username, password) {
+  async login(email, password) {
     const response = await axios
-      .post(`${API_URL}/auth/login`, { username, password });
+      .post(`${API_URL}/auth/login`, { email, password });
     if (response.data.accessToken) {
       localStorage.setItem('user', JSON.stringify(response.data));
     }

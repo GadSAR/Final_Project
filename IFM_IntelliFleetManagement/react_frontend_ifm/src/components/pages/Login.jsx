@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import {Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {Link, Navigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { AuthService } from '../../utils';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +41,7 @@ const Login = (props) => {
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -53,16 +56,17 @@ const Login = (props) => {
         // Handle login logic here
         console.log(`Logging in with email: ${email} and password: ${password}`);
         props.handleLoggedIn(email, password);
-        clear();
+        navigate('/settings');
+        clearPasswordField();
     };
 
-    function clear() {
+    function clearPasswordField() {
         setPassword('');
     }
 
     return (
         <Grid container component="main" className={classes.root}>
-            <Grid item xs={false} sm={4} md={7} className={classes.image}/>
+            <Grid item xs={false} sm={4} md={7} className={classes.image} />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Typography variant="h4" align="center" gutterBottom>
@@ -109,7 +113,7 @@ const Login = (props) => {
                                 textDecoration: 'none',
                                 transition: 'color 0.3s ease'
                             }}>
-                                Don't have an account? <span style={{color: '#c9c9ce'}}>Register here</span>
+                                Don't have an account? <span style={{ color: '#c9c9ce' }}>Register here</span>
                             </Link>
                         </p>
                     </form>

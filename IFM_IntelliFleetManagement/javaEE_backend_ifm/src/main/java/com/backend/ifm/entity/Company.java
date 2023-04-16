@@ -15,18 +15,19 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="companies")
+@Table(name = "companies")
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false, unique = true)
+    private UUID id;
 
-    @Column(name = "name", nullable=false, unique=true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy="companies")
+    @ManyToMany(mappedBy = "companies")
     private List<User> users;
 
     public Company(String company) {

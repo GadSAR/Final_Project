@@ -1,5 +1,6 @@
 package com.backend.ifm.service;
 
+import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
 import com.backend.ifm.repository.UserRepository;
@@ -11,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,25 +27,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(
+            return new CustomUserDetails(
                     user.getEmail(),
                     user.getPassword(),
-                    mapRolesToAuthorities(user.getRoles())
+                    user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()),
+                    user.getCompanies().stream().map(company -> new SimpleGrantedAuthority("ROLE_" + company.getName().toUpperCase())).collect(Collectors.toList())
             );
         } else {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-    }
-
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
     }
 
     public boolean userExists(String email) {

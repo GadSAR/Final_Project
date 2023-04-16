@@ -1,25 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
-import {createTheme, ThemeProvider} from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigation } from 'react-router-dom';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {AuthService} from './utils';
+import { AuthService } from './utils';
 import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Navbar, Footer } from './components';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const navigate = useNavigation();
+
   useEffect(() => {
-      const isDarkMode = localStorage.getItem('darkMode') === 'true';
-      setDarkMode(isDarkMode);
+    setDarkMode(localStorage.getItem('darkMode') === 'true');
+
   }, []);
 
   const handleLoggedIn = (username, password) => {
-  
+
     AuthService.login(username, password)
       .then(
         (response) => {
           setLoggedIn(true);
+          window.location.href = '/dashboard';
           console.log('Response data:', response.data);
         },
         (error) => {
@@ -29,23 +32,21 @@ const App = () => {
   };
 
   const handleLoggedOut = () => {
-      setLoggedIn(false);
+    setLoggedIn(false);
   };
 
   const toggleDarkMode = () => {
-      const newDarkMode = !darkMode;
-      localStorage.setItem('darkMode', newDarkMode);
-      setDarkMode(newDarkMode)
+    setDarkMode(localStorage.setItem('darkMode', !darkMode));
   };
 
   const theme = createTheme({
-      palette: {
-          type: darkMode ? 'dark' : 'light',
-          background: {
-              default: darkMode ? '#1a1c1e' : '#f5f5f5',
-              paper: darkMode ? '#1a1c1e' : '#f5f5f5',
-          },
-      }
+    palette: {
+      type: darkMode ? 'dark' : 'light',
+      background: {
+        default: darkMode ? '#1a1c1e' : '#f5f5f5',
+        paper: darkMode ? '#1a1c1e' : '#f5f5f5',
+      },
+    }
   });
 
   function RoutesOnly() {
@@ -63,27 +64,27 @@ const App = () => {
   }
 
   return (
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
 
-          <CssBaseline/>
+      <CssBaseline />
 
-          <Router>
+      <Router>
 
-              <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} handleLoggedOut={handleLoggedOut}/>
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} handleLoggedOut={handleLoggedOut} />
 
-              <div className="mt-8 pb-8" style={{
-                  minHeight: `calc(100vh - 64px - ${theme.spacing(8)}px)`,
-                  marginTop: theme.spacing(8),
-                  paddingBottom: theme.spacing(8),
-              }}>
-                  <RoutesOnly />
-              </div>
+        <div className="mt-8 pb-8" style={{
+          minHeight: `calc(100vh - 64px - ${theme.spacing(8)}px)`,
+          marginTop: theme.spacing(8),
+          paddingBottom: theme.spacing(8),
+        }}>
+          <RoutesOnly />
+        </div>
 
-              <Footer darkMode={darkMode}/>
+        <Footer darkMode={darkMode} />
 
-          </Router>
+      </Router>
 
-      </ThemeProvider>
+    </ThemeProvider>
   );
 }
 

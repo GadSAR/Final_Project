@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthService } from '../../utils';
+import { PinDropSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +43,7 @@ const Register = () => {
     const [company, setCompany] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleNameChange = (event) => {
         setUsername(event.target.value);
@@ -61,29 +63,40 @@ const Register = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-      
-          await AuthService.registerAdmin(username, company, email, password)
-          .then(
-            (response) => {
-                console.log('Registration successful');
-                window.location.href = '/login';
-                console.log('Response data:', response.data);
-            },
-            (error) => {
-                console.log('Registration failed', error);
-                clearPasswordField();
-            }
-          );
-    
-      };
+        AuthService.login(username, password)
+            .then(
+                (response) => {
+                    setLoggedIn(true);
+                    window.location.href = '/dashboard';
+                    console.log('Response data:', response.data);
+                },
+                (error) => {
+                    console.error('Login error:', error);
+                }
+            );
 
-    function clearPasswordField(){
+        await AuthService.registerAdmin(username, company, email, password)
+            .then(
+                (response) => {
+                    console.log('Registration successful');
+                    navigate('/login');
+                    console.log('Response data:', response.data);
+                },
+                (error) => {
+                    console.log('Registration failed', error);
+                    clearPasswordField();
+                }
+            );
+
+    };
+
+    function clearPasswordField() {
         setPassword('');
     }
 
     return (
         <Grid container component="main" className={classes.root}>
-            <Grid item xs={false} sm={4} md={7} className={classes.image}/>
+            <Grid item xs={false} sm={4} md={7} className={classes.image} />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Typography variant="h4" align="center" gutterBottom>
