@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="roles")
-public class Role {
+@Table(name="companies")
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,10 +26,10 @@ public class Role {
     @Column(name = "name", nullable=false, unique=true)
     private String name;
 
-    @ManyToMany(mappedBy="roles")
+    @ManyToMany(mappedBy="companies")
     private List<User> users;
 
-    public Role(String role) {
-        this.name = role;
+    public Company(String company) {
+        this.name = company;
     }
 }

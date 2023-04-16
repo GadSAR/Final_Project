@@ -80,7 +80,8 @@ const Navbar = (props) => {
     <AppBar>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          <NavLink style={{ textDecoration: "none", color: "inherit" }} to="/">Welcome to I.F.M</NavLink>
+          <NavLink style={{ textDecoration: "none", color: "inherit" }} to="/">
+            {isSmallScreen ? 'Welcome to I.F.M' : 'Welcome to Intelli Fleet Management'} </NavLink>
         </Typography>
         <Switch checked={props.darkMode} onChange={props.toggleDarkMode} />
         {isSmallScreen ? (

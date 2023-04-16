@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {Link, NavLink} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {

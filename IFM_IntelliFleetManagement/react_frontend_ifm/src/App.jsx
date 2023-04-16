@@ -15,7 +15,7 @@ const App = () => {
   }, []);
 
   const handleLoggedIn = (username, password) => {
-      
+  
     AuthService.login(username, password)
       .then(
         (response) => {
@@ -26,8 +26,6 @@ const App = () => {
           console.error('Login error:', error);
         }
       );
-      return <Navigate to='/' replace={true} />
-
   };
 
   const handleLoggedOut = () => {

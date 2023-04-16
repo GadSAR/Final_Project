@@ -38,9 +38,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public boolean userExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
 }

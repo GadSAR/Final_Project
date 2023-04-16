@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
+import { AuthService } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,12 +38,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
     const classes = useStyles();
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
+    const [company, setCompany] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleNameChange = (event) => {
-        setName(event.target.value);
+        setUsername(event.target.value);
+    };
+
+    const handleCompanyChange = (event) => {
+        setCompany(event.target.value);
     };
 
     const handleEmailChange = (event) => {
@@ -53,14 +59,25 @@ const Register = () => {
         setPassword(event.target.value);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle registration logic here
-        console.log(`Registering with name: ${name}, email: ${email}, and password: ${password}`);
-        clear();
-    };
+      
+          await AuthService.registerAdmin(username, company, email, password)
+          .then(
+            (response) => {
+                console.log('Registration successful');
+                window.location.href = '/login';
+                console.log('Response data:', response.data);
+            },
+            (error) => {
+                console.log('Registration failed', error);
+                clearPasswordField();
+            }
+          );
+    
+      };
 
-    function clear(){
+    function clearPasswordField(){
         setPassword('');
     }
 
@@ -81,8 +98,18 @@ const Register = () => {
                             autoFocus
                             required
                             type="text"
-                            value={name}
+                            value={username}
                             onChange={handleNameChange}
+                        />
+                        <TextField
+                            label="Company Name"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            type="text"
+                            value={company}
+                            onChange={handleCompanyChange}
                         />
                         <TextField
                             label="Email Address"
@@ -100,6 +127,7 @@ const Register = () => {
                             margin="normal"
                             fullWidth
                             required
+                            aria-invalid="false"
                             type="password"
                             value={password}
                             onChange={handlePasswordChange}

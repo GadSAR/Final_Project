@@ -3,7 +3,9 @@ package com.backend.ifm.controller;
 import com.backend.ifm.config.AuthenticationRequest;
 import com.backend.ifm.config.AuthenticationResponse;
 import com.backend.ifm.config.JwtUtil;
+import com.backend.ifm.config.RegisterRequest;
 import com.backend.ifm.entity.User;
+import com.backend.ifm.service.AccountsService;
 import com.backend.ifm.service.CustomUserDetailsService;
 import com.backend.ifm.service.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class AuthenticationController {
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
+    private AccountsService accountsService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
@@ -45,9 +50,9 @@ public class AuthenticationController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
-        UserDetails userDetails = null;
+        UserDetails userDetails;
         try {
-            userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -55,8 +60,9 @@ public class AuthenticationController {
         if (passwordEncoder.matches(authenticationRequest.getPassword(), userDetails.getPassword())) {
 
             User user = new User();
-            user.setName(authenticationRequest.getUsername());
+            user.setName(authenticationRequest.getEmail());
             user.setPassword(authenticationRequest.getPassword());
+            user.setCompanies();
             user.setRoles(userDetails.getAuthorities().stream().map(authority -> new Role(null, authority.getAuthority(), null)).collect(Collectors.toList()));
             String jwtToken = jwtUtil.generateToken(user);
 
@@ -72,6 +78,29 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+    @PostMapping("/auth/registerAdmin")
+    public ResponseEntity<?> registerAdmin(@RequestBody RegisterRequest registerRequest) {
+        try {
+            if (customUserDetailsService.userExists(registerRequest.getEmail())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("User with the provided email already exists");
+            }
+
+            accountsService.createAdmin
+                    (registerRequest.getUsername(),
+                            registerRequest.getCompany(),
+                            registerRequest.getEmail(),
+                            registerRequest.getPassword());
+
+            return ResponseEntity.ok("Registration successful");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to register user");
+        }
+    }
+
 
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(@RequestBody AuthenticationResponse authenticationResponse) {

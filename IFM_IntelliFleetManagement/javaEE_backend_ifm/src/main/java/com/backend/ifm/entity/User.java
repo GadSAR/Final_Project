@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,26 +24,34 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 45)
+    @Column(name = "email", nullable = false, unique = true, length = 45)
     private String email;
 
-    @Column(nullable = false, length = 64)
+    @Column(name = "password", nullable = false, length = 64)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
     @JoinTable(
             name="users_roles",
             joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
-    public User(String name, String email, String password, List<Role> roles) {
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
+    @JoinTable(
+            name="users_companies",
+            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
+            inverseJoinColumns={@JoinColumn(name="COMPANY_ID", referencedColumnName="ID")})
+    private List<Company> companies = new ArrayList<>();
+
+    public User(String name, String email, String password, List<Role> roles, List<Company> companies) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.companies = companies;
     }
 }
