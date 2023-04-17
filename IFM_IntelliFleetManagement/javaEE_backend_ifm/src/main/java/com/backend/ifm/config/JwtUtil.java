@@ -1,4 +1,5 @@
 package com.backend.ifm.config;
+import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +19,8 @@ public class JwtUtil {
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getName());
         claims.put("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
+        claims.put("companies", user.getCompanies().stream().map(Company::getName).collect(Collectors.toList()));
+        claims.put("email", user.getEmail());
 
         long TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
         return Jwts.builder()

@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify, render_template, abort
-
 from scripts import model1_predict, model1_build, model2_predict, model2_build, model3_predict
 
 
 app = Flask(__name__)
-
 
 # Define a list of allowed IP addresses and ports
 ALLOWED_IPS = ['127.0.0.1', 'localhost']
@@ -39,6 +37,7 @@ def home():
 @app.route('/get_example', methods=['GET'])
 def get_example():
     # Your code for handling the GET request
+    print('hello')
     return jsonify({'message': 'This is a GET request example'})
 
 
@@ -77,4 +76,4 @@ def get_domain(domain_id):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='localhost', port=5000, debug=True)

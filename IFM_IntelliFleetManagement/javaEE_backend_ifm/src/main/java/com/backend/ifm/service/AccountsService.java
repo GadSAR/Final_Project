@@ -1,5 +1,6 @@
 package com.backend.ifm.service;
 
+import com.backend.ifm.config.UpdateUserRequest;
 import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
@@ -22,7 +23,7 @@ public class AccountsService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
 
     public void createAccount(String name, String company, String email, String password, String roleName) {
@@ -63,4 +64,23 @@ public class AccountsService {
         return role;
     }
 
+    public User updateUser(UpdateUserRequest updateUserRequest) {
+        User user = userRepository.findByEmail(updateUserRequest.getEmail());
+        if (user != null) {
+            if (!updateUserRequest.getUsername().isEmpty()) {
+                user.setName(updateUserRequest.getUsername());
+            }
+            if (!updateUserRequest.getCompany().isEmpty()) {
+                Company company = companyRepository.findByName(user.getCompany());
+                company.setName(updateUserRequest.getCompany());
+                companyRepository.save(company);
+            }
+            if (passwordEncoder.matches(updateUserRequest.getC_password(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(updateUserRequest.getN_password()));
+            }
+            userRepository.save(user);
+            return user;
+        }
+        return null;
+    }
 }

@@ -104,7 +104,7 @@ const Register = () => {
                     </Typography>
                     <form onSubmit={handleSubmit} className={classes.form}>
                         <TextField
-                            label="Name"
+                            label="Username"
                             variant="outlined"
                             margin="normal"
                             fullWidth

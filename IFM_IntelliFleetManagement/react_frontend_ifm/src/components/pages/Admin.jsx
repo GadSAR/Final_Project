@@ -46,10 +46,6 @@ const Admin = () => {
     const [editing, setEditing] = useState(false);
 
     const handleClose = () => {
-        fetch(`${API_URL}/model1_build`, {
-            method: 'GET',
-        })
-        console.log('model1_build');
         setOpen(false);
         setEditing(false);
         setUser(initialUser);
@@ -142,7 +138,7 @@ const Admin = () => {
     }, []);
 
     return (
-        <Container maxWidth="lg" >
+        <Container className="pt-8" maxWidth="lg" >
             <Typography variant="h3" gutterBottom >
                 Users
             </Typography>
@@ -210,9 +206,10 @@ const Admin = () => {
                     <TextField
                         autoFocus
                         margin="dense"
-                        name="name"
-                        label="Name"
+                        name="username"
+                        label="Username"
                         type="text"
+                        required
                         value={user.name}
                         onChange={handleInputChange}
                         fullWidth
@@ -222,16 +219,18 @@ const Admin = () => {
                         name="email"
                         label="Email"
                         type="email"
+                        required
                         value={user.email}
                         onChange={handleInputChange}
                         fullWidth
                     />
                     <TextField
                         margin="dense"
-                        name="role"
-                        label="Role"
-                        type="text"
-                        value={user.role}
+                        name="password"
+                        label="Password"
+                        type="password"
+                        required
+                        value={user.password}
                         onChange={handleInputChange}
                         fullWidth
                     />

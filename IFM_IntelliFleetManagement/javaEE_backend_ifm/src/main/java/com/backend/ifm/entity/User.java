@@ -55,4 +55,8 @@ public class User {
         this.roles = roles;
         this.companies = companies;
     }
+
+    public String getCompany() {
+        return companies.get(0).getName();
+    }
 }

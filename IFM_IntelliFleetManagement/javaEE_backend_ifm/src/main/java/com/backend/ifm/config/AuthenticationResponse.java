@@ -25,4 +25,5 @@ public class AuthenticationResponse {
     public String getJwtToken() {
         return this.accessToken;
     }
+
 }

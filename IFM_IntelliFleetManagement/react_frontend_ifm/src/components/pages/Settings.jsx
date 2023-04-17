@@ -19,22 +19,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = () => {
     const classes = useStyles();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [c_password, setC_password] = useState('');
+    const [n_password, setN_password] = useState('');
     const [username, setUsername] = useState('');
     const [company, setCompany] = useState('');
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
         if (user) {
-            const role = user.roles && user.roles.length > 0 ? user.roles[0] : '';
-            const company = user.companies && user.companies.length > 0 ? user.companies[0] : '';
-            const email = user.email || '';
-            const password = user.password || '';
-            setEmail(email);
-            setPassword(password);
-            setUsername(user.username || '');
-            setCompany(company);
+            setUsername(user.sub);
+            setCompany(user.companies[0]);
         }
     }, []);
 
@@ -43,7 +37,17 @@ const Settings = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // TODO: Add form submission logic
+        const user = AuthService.getCurrentUser();
+        if (user !== null) {
+            AuthService.updateUser(user.email, username, company, c_password, n_password)
+                .then((response) => {
+                    console.log('success update');
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     };
 
     return (
@@ -53,40 +57,39 @@ const Settings = () => {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Email Address"
-                                type="email"
-                                fullWidth
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Password"
-                                type="password"
-                                fullWidth
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
                                 label="Username"
+                                type="text"
                                 fullWidth
-                                required
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </Grid>
+                        {AuthService.isAuthenticated() ? (
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Company"
+                                    type="text"
+                                    fullWidth
+                                    value={company}
+                                    onChange={(e) => setCompany(e.target.value)}
+                                />
+                            </Grid>) : null}
                         <Grid item xs={12}>
                             <TextField
-                                label="Company"
+                                label="Current Password"
+                                type="password"
                                 fullWidth
-                                required
-                                value={company}
-                                onChange={(e) => setCompany(e.target.value)}
+                                value={c_password}
+                                onChange={(e) => setC_password(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="new Password"
+                                type="password"
+                                fullWidth
+                                value={n_password}
+                                onChange={(e) => setN_password(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>

@@ -1,9 +1,6 @@
 package com.backend.ifm.controller;
 
-import com.backend.ifm.config.AuthenticationRequest;
-import com.backend.ifm.config.AuthenticationResponse;
-import com.backend.ifm.config.JwtUtil;
-import com.backend.ifm.config.RegisterRequest;
+import com.backend.ifm.config.*;
 import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.User;
 import com.backend.ifm.service.AccountsService;
@@ -60,7 +57,8 @@ public class AuthenticationController {
         if (passwordEncoder.matches(authenticationRequest.getPassword(), userDetails.getPassword())) {
 
             User user = new User();
-            user.setName(authenticationRequest.getEmail());
+            user.setName(userDetails.getName());
+            user.setEmail(authenticationRequest.getEmail());
             user.setPassword(authenticationRequest.getPassword());
             user.setRoles(userDetails.getAuthorities().stream().map(authority -> new Role(null, authority.getAuthority(), null)).collect(Collectors.toList()));
             user.setCompanies(userDetails.getCompanies().stream().map(company -> new Company(null, company.getAuthority(), null)).collect(Collectors.toList()));
@@ -107,6 +105,15 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unable to logout");
         }
     }
+
+
+    @PostMapping("/auth/updateUser")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        User user = accountsService.updateUser(updateUserRequest);
+        String jwtToken = jwtUtil.generateToken(user);
+        return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+    }
+
 
     private boolean isPasswordMatch(String rawPassword, String encodedPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
