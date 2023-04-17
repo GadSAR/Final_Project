@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 const currentIP = window.location.hostname;
-const API_URL = `http://${currentIP}:8080/ifm_api`;
+const API_URL = `http://192.168.1.20:8080/ifm_api`;
 
 class AuthService {
 

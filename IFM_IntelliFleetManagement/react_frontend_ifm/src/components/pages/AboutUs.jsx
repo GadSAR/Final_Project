@@ -1,6 +1,6 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Container, Typography, Grid, Card, CardContent} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, Typography, Grid, Card, CardContent } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,22 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 const teamMembers = [
     {
-        name: 'John Doe',
-        role: 'Founder and CEO',
+        name: 'Gad Sarusi',
+        role: 'Developer',
         bio:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae justo molestie, gravida nisi et, eleifend urna. Phasellus porttitor, velit ac malesuada ultrices, sapien arcu bibendum sapien, quis porttitor neque magna quis velit.',
-    },
-    {
-        name: 'Jane Smith',
-        role: 'Chief Operating Officer',
-        bio:
-            'Sed vehicula fringilla lectus ac pharetra. Maecenas sollicitudin elit a lacinia iaculis. Nam vitae posuere velit. Praesent varius, augue vel tempus faucibus, mi tellus malesuada felis, vel vestibulum metus leo nec nisi.',
-    },
-    {
-        name: 'Bob Johnson',
-        role: 'Chief Financial Officer',
-        bio:
-            'Duis at dolor imperdiet, consectetur est vitae, tristique mauris. Ut ultricies odio nec erat tempor interdum. Nam at eleifend purus, a euismod quam. Aliquam et ullamcorper nibh. Donec quis mauris nec eros venenatis lobortis a sed mauris.',
+            'A passionate developer from Israel. Always looking for new challenges and opportunities to learn and grow.',
     },
 ];
 
@@ -55,7 +43,7 @@ const AboutUs = () => {
             </Typography>
             <Grid container spacing={3}>
                 {teamMembers.map((teamMember, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Grid item xs={12} sm={6} md={12} key={index}>
                         <Card className={classes.card}>
                             <CardContent className={classes.cardContent}>
                                 <Typography variant="h5" component="h2" gutterBottom>

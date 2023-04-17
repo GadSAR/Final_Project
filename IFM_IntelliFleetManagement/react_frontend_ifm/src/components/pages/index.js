@@ -7,4 +7,4 @@ import Register from './Register';
 import Settings from './Settings';
 import Predict from './Predict';
 
-export { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict };
+export { AboutUs as AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict };

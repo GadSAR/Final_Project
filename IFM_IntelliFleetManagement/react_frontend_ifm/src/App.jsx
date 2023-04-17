@@ -35,8 +35,8 @@ const App = () => {
     palette: {
       type: darkMode ? 'dark' : 'light',
       background: {
-        default: darkMode ? '#1a1c1e' : '#f5f5f5',
-        paper: darkMode ? '#1a1c1e' : '#f5f5f5',
+        default: darkMode ? '#1a1c1e' : '#F7F9FB',
+        paper: darkMode ? '#181a1c' : '#f5f5f5',
       },
     }
   });

@@ -2,6 +2,7 @@ package com.backend.ifm.controller;
 
 import com.backend.ifm.config.*;
 import com.backend.ifm.entity.Company;
+import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
 import com.backend.ifm.service.AccountsService;
 import com.backend.ifm.service.CustomUserDetails;
@@ -10,18 +11,14 @@ import com.backend.ifm.service.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import com.backend.ifm.entity.Role;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController

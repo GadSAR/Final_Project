@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
+import { AuthService } from '../../utils';
 
 const API_URL = 'http://localhost:8080/ifm_api';
 
@@ -14,10 +15,11 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(8),
     },
     table: {
+        marginTop: theme.spacing(1),
         minWidth: 650,
     },
     addButton: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(1),
         marginRight: theme.spacing(2),
     },
     editButton: {
@@ -140,7 +142,7 @@ const Admin = () => {
     return (
         <Container className="pt-8" maxWidth="lg" >
             <Typography variant="h3" gutterBottom >
-                Users
+                {AuthService.getCurrentUser() ? AuthService.getCurrentUser().companies[0] + ' Users' : 'Users'}
             </Typography>
             <Button
                 variant="contained"
@@ -155,7 +157,7 @@ const Admin = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>ID</TableCell>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Username</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Role</TableCell>
                             <TableCell>Actions</TableCell>
@@ -203,6 +205,17 @@ const Admin = () => {
                     <DialogContentText>
                         To {editing ? 'edit' : 'add'} a user, please fill in the fields below.
                     </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        name="id"
+                        label="ID"
+                        type="text"
+                        required
+                        value={user.id}
+                        onChange={handleInputChange}
+                        fullWidth
+                    />
                     <TextField
                         autoFocus
                         margin="dense"
