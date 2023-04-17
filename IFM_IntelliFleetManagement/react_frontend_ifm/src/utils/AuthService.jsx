@@ -27,6 +27,18 @@ class AuthService {
     }
   }
 
+  async updateUser(email, username, company, c_password, n_password) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/updateUser`, { email, username, company, c_password, n_password });
+      if (response.data.accessToken) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+      }
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
+    }
+  }
+
   logout() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.accessToken) {
