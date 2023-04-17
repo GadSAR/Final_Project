@@ -47,6 +47,8 @@ const Settings = () => {
                 .catch((error) => {
                     console.log(error);
                 });
+            setC_password('');
+            setN_password('');
         }
     };
 
@@ -62,6 +64,7 @@ const Settings = () => {
                                 fullWidth
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                autocomplete="off"
                             />
                         </Grid>
                         {AuthService.isAuthenticated() ? (
@@ -72,6 +75,7 @@ const Settings = () => {
                                     fullWidth
                                     value={company}
                                     onChange={(e) => setCompany(e.target.value)}
+                                    autocomplete="off"
                                 />
                             </Grid>) : null}
                         <Grid item xs={12}>
@@ -90,6 +94,7 @@ const Settings = () => {
                                 fullWidth
                                 value={n_password}
                                 onChange={(e) => setN_password(e.target.value)}
+                                autocomplete="off"
                             />
                         </Grid>
                         <Grid item xs={12}>

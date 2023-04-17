@@ -49,7 +49,7 @@ const App = () => {
         <Route exact path='/register' element={<Register />} />
         <Route exact path='/contact-us' element={<ContactUs />} />
         <Route exact path='/about-us' element={<AboutUs />} />
-        <Route path='/settings' element={AuthService.getUserRole() ? <Settings /> : <Navigate to="/" />} />
+        <Route path='/settings' element={AuthService.getCurrentUser() ? <Settings /> : <Navigate to="/" />} />
         <Route path="/admin" element={AuthService.isAuthenticated() ? <Admin /> : <Navigate to="/" />} />
       </Routes>
     );
