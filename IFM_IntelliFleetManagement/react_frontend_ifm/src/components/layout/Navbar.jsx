@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import {AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Switch, Avatar, useMediaQuery} from "@material-ui/core";
-import {NavLink} from "react-router-dom";
-import AuthService from 'C:/Users/sarga/Desktop/College/Second_year/Final_Project/IFM_IntelliFleetManagement/react_frontend_ifm/src/utils/AuthService.jsx';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Switch, Avatar, useMediaQuery } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
+import { AuthService } from '../../utils';
 
 
 const Navbar = (props) => {
@@ -16,10 +16,11 @@ const Navbar = (props) => {
     setAnchorEl(null);
   };
 
-  function logAction() {
-    props.handleLoggedOut();
-    handleMenuClose();
-  }
+  const handleLoggedOut = () => {
+    AuthService.logout();
+    props.setLoggedIn(false);
+  };
+
 
   const menuItems = props.loggedIn ? (
     [
@@ -51,7 +52,7 @@ const Navbar = (props) => {
         </MenuItem>
       </NavLink>,
       <NavLink key="logout" to="/" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={logAction}>
+        <MenuItem onClick={handleLoggedOut}>
           Logout
         </MenuItem>
       </NavLink>

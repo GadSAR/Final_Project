@@ -53,11 +53,18 @@ const Login = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Handle login logic here
-        console.log(`Logging in with email: ${email} and password: ${password}`);
-        props.handleLoggedIn(email, password);
-        navigate('/settings');
-        clearPasswordField();
+        AuthService.login(email, password)
+            .then((response) => {
+                if (response === 'error') {
+                    clearPasswordField();
+                    console.log(`error Logging in`);
+                }
+                else {
+                    console.log(`Logging in with email: ${email} and password: ${password}`);
+                    props.setLoggedIn(true);
+                    navigate('/settings');
+                }
+            });
     };
 
     function clearPasswordField() {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { AuthService } from './utils';
@@ -9,34 +9,26 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const navigate = useNavigation();
-
   useEffect(() => {
-    setDarkMode(localStorage.getItem('darkMode') === 'true');
-
+    const checkCurrentUser = async () => {
+      try {
+        const user = await AuthService.getCurrentUser();
+        if (user) {
+          setLoggedIn(true);
+        }
+        else {
+          setLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Error checking current user:', error);
+      }
+    };
+    checkCurrentUser();
   }, []);
 
-  const handleLoggedIn = (username, password) => {
-
-    AuthService.login(username, password)
-      .then(
-        (response) => {
-          setLoggedIn(true);
-          window.location.href = '/dashboard';
-          console.log('Response data:', response.data);
-        },
-        (error) => {
-          console.error('Login error:', error);
-        }
-      );
-  };
-
-  const handleLoggedOut = () => {
-    setLoggedIn(false);
-  };
 
   const toggleDarkMode = () => {
-    setDarkMode(localStorage.setItem('darkMode', !darkMode));
+    setDarkMode(!darkMode);
   };
 
   const theme = createTheme({
@@ -53,11 +45,11 @@ const App = () => {
     return (
       <Routes>
         <Route exact path='/' element={<Home />} />
-        <Route exact path='/login' element={<Login handleLoggedIn={handleLoggedIn} />} />
+        <Route exact path='/login' element={<Login setLoggedIn={setLoggedIn} />} />
         <Route exact path='/register' element={<Register />} />
         <Route exact path='/contact-us' element={<ContactUs />} />
         <Route exact path='/about-us' element={<AboutUs />} />
-        <Route exact path='/settings' element={<Settings />} />
+        <Route path='/settings' element={AuthService.getCurrentUser() ? <Settings /> : <Navigate to="/" />} />
         <Route path="/admin" element={AuthService.isAuthenticated() ? <Admin /> : <Navigate to="/" />} />
       </Routes>
     );
@@ -70,7 +62,7 @@ const App = () => {
 
       <Router>
 
-        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} handleLoggedOut={handleLoggedOut} />
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
 
         <div className="mt-8 pb-8" style={{
           minHeight: `calc(100vh - 64px - ${theme.spacing(8)}px)`,

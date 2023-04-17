@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Paper, Grid, TextField, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
+import { AuthService } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        padding:theme.spacing(3),
+        padding: theme.spacing(3),
     },
     paper: {
         padding: theme.spacing(3),
@@ -20,8 +21,25 @@ const Settings = () => {
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [company, setCompany] = useState('');
+
+    useEffect(() => {
+        const user = AuthService.getCurrentUser();
+        if (user) {
+            const role = user.roles && user.roles.length > 0 ? user.roles[0] : '';
+            const company = user.companies && user.companies.length > 0 ? user.companies[0] : '';
+            const email = user.email || '';
+            const password = user.password || '';
+            setEmail(email);
+            setPassword(password);
+            setUsername(user.username || '');
+            setCompany(company);
+        }
+    }, []);
+
+
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -53,22 +71,22 @@ const Settings = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
-                                label="First Name"
+                                label="Username"
                                 fullWidth
                                 required
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
-                                label="Last Name"
+                                label="Company"
                                 fullWidth
                                 required
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                value={company}
+                                onChange={(e) => setCompany(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>

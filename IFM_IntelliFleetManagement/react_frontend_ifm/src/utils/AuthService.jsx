@@ -5,14 +5,17 @@ const currentIP = window.location.hostname;
 const API_URL = `http://${currentIP}:8080/ifm_api`;
 
 class AuthService {
-  
+
   async login(email, password) {
     const response = await axios
       .post(`${API_URL}/auth/login`, { email, password });
     if (response.data.accessToken) {
       localStorage.setItem('user', JSON.stringify(response.data));
+      return response.data;
     }
-    return response.data;
+    else {
+      return 'error';
+    }
   }
 
   async registerAdmin(username, company, email, password) {
@@ -25,25 +28,23 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('user');
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.accessToken) {
       axios.post(`${API_URL}/auth/logout`, { token: user.accessToken });
+    }
+    localStorage.removeItem('user');
+
   }
-  localStorage.removeItem('user');
-    
-   }
 
   getCurrentUser() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.accessToken) {
       const decodedToken = jwtDecode(user.accessToken);
-       if (user.roles) {
+      if (user.roles) {
         decodedToken.roles = user.roles.map((role) => role.name);
       }
       return decodedToken;
     }
-
     return null;
   }
 

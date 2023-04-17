@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Client_Obd2Scanner {
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, ServerNotActiveException {
+    public static void main(String[] args, String carID, String driverID) throws MalformedURLException, NotBoundException, RemoteException, ServerNotActiveException {
 
 
         String message = "Hello ";
