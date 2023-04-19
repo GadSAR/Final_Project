@@ -33,11 +33,10 @@ def home():
     return render_template('index.html')
 
 
-# Define a route for GET request
-@app.route('/get_example', methods=['GET'])
-def get_example():
-    # Your code for handling the GET request
+@app.route('/model2_predict', methods=['GET'])
+def model2_predict():
     print('hello')
+    model2_predict.main()
     return jsonify({'message': 'This is a GET request example'})
 
 

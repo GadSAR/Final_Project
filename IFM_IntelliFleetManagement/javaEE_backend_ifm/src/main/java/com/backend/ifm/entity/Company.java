@@ -1,5 +1,6 @@
 package com.backend.ifm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Company {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "companies")
     private List<User> users;
 

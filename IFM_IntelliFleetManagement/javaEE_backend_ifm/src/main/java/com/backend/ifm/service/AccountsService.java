@@ -83,4 +83,27 @@ public class AccountsService {
         }
         return null;
     }
+
+    public void UpdateUserByAdmin(UpdateUserRequest updateUserRequest) {
+        User user = userRepository.findByEmail(updateUserRequest.getEmail());
+        if (user != null) {
+            if ((!(updateUserRequest.getN_email() == null)) && (userRepository.findByEmail(updateUserRequest.getN_email()) == null)) {
+                user.setEmail(updateUserRequest.getN_email());
+            }
+            if (!(updateUserRequest.getUsername() == null)) {
+                user.setName(updateUserRequest.getUsername());
+            }
+            if (!(updateUserRequest.getN_password() == null)) {
+                user.setPassword(passwordEncoder.encode(updateUserRequest.getN_password()));
+            }
+            userRepository.save(user);
+        }
+    }
+
+    public void deleteUserByEmail(String email) {
+        User userToDelete = userRepository.findByEmail(email);
+        if (userToDelete != null) {
+            userRepository.deleteUserByEmail(email);
+        }
+    }
 }

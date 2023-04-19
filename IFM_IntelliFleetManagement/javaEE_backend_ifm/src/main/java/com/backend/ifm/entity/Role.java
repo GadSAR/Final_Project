@@ -1,5 +1,6 @@
 package com.backend.ifm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Role {
     @Column(name = "name", nullable=false, unique=true)
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy="roles")
     private List<User> users;
 

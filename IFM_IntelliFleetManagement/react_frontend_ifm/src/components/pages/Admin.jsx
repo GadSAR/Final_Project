@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
@@ -37,7 +37,11 @@ const initialUser = {
     id: '',
     name: '',
     email: '',
-    role: '',
+    n_email: '',
+    roles: '',
+    companies: '',
+    password: '',
+    n_password: '',
 };
 
 const Admin = () => {
@@ -64,41 +68,43 @@ const Admin = () => {
         setOpen(true);
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = (email) => {
+        const companyName = AuthService.getCurrentUser().companies[0];
 
         // send a DELETE request to the server to delete the user with the given id
-        fetch(`${API_URL}/users/${id}`, {
-            method: 'DELETE',
-        })
+        AuthService.deleteUserByAdmin(email)
             .then(() => {
-                console.log(`User ${id} deleted`);
+                console.log(`User ${email} deleted`);
                 // update the list of users by fetching the latest data from the server
-                fetch('${API_URL}/users')
+                fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
                     .then((res) => res.json())
                     .then((result) => {
                         setUsers(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
                     });
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+
     };
 
     const handleSave = () => {
+        const companyName = AuthService.getCurrentUser().companies[0];
         if (editing) {
             // send a PUT request to the server to update the user with the given id
-            fetch(`${API_URL}/users/${user.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            })
+            AuthService.updateUserByAdmin(user.email, user.n_email, user.name, companyName, user.n_password)
                 .then(() => {
                     console.log(`User ${user.id} updated`);
-                    // update the list of users by fetching the latest data from the server
-                    fetch('${API_URL}/users')
+                    fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
                             setUsers(result);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
                         });
                 })
                 .catch((error) => {
@@ -106,18 +112,16 @@ const Admin = () => {
                 });
         } else {
             // send a POST request to the server to create a new user
-            fetch('${API_URL}/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            })
+            AuthService.registerUser(user.name, companyName, user.n_email, user.n_password)
                 .then(() => {
                     console.log('New user added');
-                    // update the list of users by
-                    fetch('${API_URL}/users')
+                    fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
                             setUsers(result);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
                         });
                 })
                 .catch((error) => {
@@ -129,7 +133,8 @@ const Admin = () => {
 
     useEffect(() => {
         // fetch the list of users from the server on initial render
-        fetch('${API_URL}/users')
+        const companyName = AuthService.getCurrentUser().companies[0];
+        fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
             .then((res) => res.json())
             .then((result) => {
                 setUsers(result);
@@ -142,7 +147,7 @@ const Admin = () => {
     return (
         <Container className="pt-8" maxWidth="lg" >
             <Typography variant="h3" gutterBottom >
-                {AuthService.getCurrentUser() ? AuthService.getCurrentUser().companies[0] + ' Users' : 'Users'}
+                {AuthService.getCurrentUser() ? AuthService.getCurrentUser().companies[0] + '`s Users' : 'Users'}
             </Typography>
             <Button
                 variant="contained"
@@ -156,7 +161,6 @@ const Admin = () => {
                 <Table className={classes.table} aria-label="users table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>ID</TableCell>
                             <TableCell>Username</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Role</TableCell>
@@ -166,12 +170,11 @@ const Admin = () => {
                     <TableBody>
                         {users.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell component="th" scope="row">
-                                    {user.id}
-                                </TableCell>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.role}</TableCell>
+                                <TableCell>
+                                    {user.roles.length > 0 ? user.roles[0].name : 'No role'} {/* Display the first role name */}
+                                </TableCell>
                                 <TableCell>
                                     <IconButton
                                         aria-label="edit"
@@ -183,7 +186,7 @@ const Admin = () => {
                                     <IconButton
                                         aria-label="delete"
                                         className={classes.deleteButton}
-                                        onClick={() => handleDelete(user.id)}
+                                        onClick={() => handleDelete(user.email)}
                                     >
                                         <Delete />
                                     </IconButton>
@@ -202,24 +205,10 @@ const Admin = () => {
                     {editing ? 'Edit User' : 'Add User'}
                 </DialogTitle>
                 <DialogContent className={classes.dialog}>
-                    <DialogContentText>
-                        To {editing ? 'edit' : 'add'} a user, please fill in the fields below.
-                    </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
-                        name="id"
-                        label="ID"
-                        type="text"
-                        required
-                        value={user.id}
-                        onChange={handleInputChange}
-                        fullWidth
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        name="username"
+                        name="name"
                         label="Username"
                         type="text"
                         required
@@ -229,21 +218,21 @@ const Admin = () => {
                     />
                     <TextField
                         margin="dense"
-                        name="email"
+                        name="n_email"
                         label="Email"
                         type="email"
                         required
-                        value={user.email}
+                        value={user.n_email}
                         onChange={handleInputChange}
                         fullWidth
                     />
                     <TextField
                         margin="dense"
-                        name="password"
+                        name="n_password"
                         label="Password"
                         type="password"
                         required
-                        value={user.password}
+                        value={user.n_password}
                         onChange={handleInputChange}
                         fullWidth
                     />
@@ -253,7 +242,7 @@ const Admin = () => {
                         Cancel
                     </Button>
                     <Button onClick={handleSave} color="primary">
-                        {editing ? 'Save' : 'Add'}
+                        {editing ? 'Update' : 'Add'}
                     </Button>
                 </DialogActions>
             </Dialog>

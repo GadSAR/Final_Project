@@ -12,6 +12,7 @@ import lombok.Setter;
 public class UpdateUserRequest {
 
     private String email;
+    private String n_email;
     private String username;
     private String company;
     private String c_password;

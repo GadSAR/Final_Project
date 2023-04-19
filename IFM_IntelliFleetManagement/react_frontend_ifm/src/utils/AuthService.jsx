@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 const currentIP = window.location.hostname;
-const API_URL = `http://192.168.1.20:8080/ifm_api`;
+const API_URL = `http://${currentIP}:8080/ifm_api`;
 
 class AuthService {
 
@@ -27,6 +27,15 @@ class AuthService {
     }
   }
 
+  async registerUser(username, company, email, password) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/registerUser`, { username, company, email, password });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error during registration: ${error.message}`);
+    }
+  }
+
   async updateUser(email, username, company, c_password, n_password) {
     try {
       const response = await axios.post(`${API_URL}/auth/updateUser`, { email, username, company, c_password, n_password });
@@ -39,13 +48,34 @@ class AuthService {
     }
   }
 
-  logout() {
+
+  async updateUserByAdmin(email, n_email, username, company, n_password) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/updateUserByAdmin`, { email, n_email, username, company, n_password });
+      if (response.data.accessToken) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+      }
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
+    }
+  }
+
+  async deleteUserByAdmin(email) {
+    try {
+      const response = await axios.post(`${API_URL}/auth/deleteUserByAdmin`, { email })
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
+    }
+  }
+
+  async logout() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.accessToken) {
-      axios.post(`${API_URL}/auth/logout`, { token: user.accessToken });
+      axios.post(`${API_URL}/auth/logout`, { accessToken: user.accessToken });
     }
     localStorage.removeItem('user');
-
   }
 
   getCurrentUser() {

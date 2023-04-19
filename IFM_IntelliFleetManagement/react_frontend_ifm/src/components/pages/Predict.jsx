@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Student() {
-    const paperStyle = { margin: 'auto', padding: '50px 20px', width: '50%'};
+    const paperStyle = { margin: 'auto', padding: '50px 20px', width: '50%' };
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [students, setStudents] = useState([]);
@@ -25,7 +25,7 @@ export default function Student() {
         e.preventDefault();
         const student = { name, address };
         console.log(student);
-        fetch( '${API_URL}/add', {
+        fetch('${API_URL}/add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(student),

@@ -14,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -91,6 +89,29 @@ public class AuthenticationController {
     }
 
 
+    @PostMapping("/auth/registerUser")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+        try {
+            if (customUserDetailsService.userExists(registerRequest.getEmail())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("User with the provided email already exists");
+            }
+
+            accountsService.createUser
+                    (registerRequest.getUsername(),
+                            registerRequest.getCompany(),
+                            registerRequest.getEmail(),
+                            registerRequest.getPassword());
+
+            return ResponseEntity.ok("Registration successful");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to register user");
+        }
+    }
+
+
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(@RequestBody AuthenticationResponse authenticationResponse) {
         try {
@@ -109,6 +130,19 @@ public class AuthenticationController {
         User user = accountsService.updateUser(updateUserRequest);
         String jwtToken = jwtUtil.generateToken(user);
         return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+    }
+
+    @PostMapping("/auth/updateUserByAdmin")
+    public ResponseEntity<?> updateUserByAdmin(@RequestBody UpdateUserRequest updateUserRequest) {
+        accountsService.UpdateUserByAdmin(updateUserRequest);
+        return ResponseEntity.ok("User updated by admin successfully");
+    }
+
+
+    @PostMapping("/auth/deleteUserByAdmin")
+    public ResponseEntity<?> deleteUserByAdmin(@RequestBody UpdateUserRequest updateUserRequest) {
+        accountsService.deleteUserByEmail(updateUserRequest.getEmail());
+        return ResponseEntity.ok("User deleted by admin successfully");
     }
 
 

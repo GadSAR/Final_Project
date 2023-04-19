@@ -60,7 +60,7 @@ const Login = (props) => {
                     console.log(`error Logging in`);
                 }
                 else {
-                    console.log(`Logging in with email: ${email} and password: ${password}`);
+                    console.log(`Logging in with email: ${email}`);
                     props.setLoggedIn(true);
                     navigate('/settings');
                 }

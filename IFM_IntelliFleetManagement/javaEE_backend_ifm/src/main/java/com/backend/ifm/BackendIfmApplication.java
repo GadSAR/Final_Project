@@ -26,9 +26,9 @@ public class BackendIfmApplication implements CommandLineRunner  {
 
         if (roleRepository.findByName("ROLE_USER") == null) {
             accountsService.createAdmin
-                    ("admin user", "exemple", "admin@gmail.com", "admin");
+                    ("admin", "Example", "admin@gmail.com", "admin");
             accountsService.createUser
-                    ("user user", "exemple","user@gmail.com", "user");
+                    ("user", "Example","user@gmail.com", "user");
         }
     }
 }
