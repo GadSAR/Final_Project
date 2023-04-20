@@ -143,6 +143,20 @@ def model_load_structure(model_id):
     return model
 
 
+def model_load_weights_backup(model, model_id):
+    model_weights_path = "../generated/backup/model{model_id}_weights.hdf5".format(model_id=model_id)
+    model.load_weights(model_weights_path)
+
+    return model
+
+
+def model_load_structure_backup(model_id):
+    model_structure_path = "../generated/backup/model{model_id}_structure.h5".format(model_id=model_id)
+    model = load_model(model_structure_path)
+
+    return model
+
+
 def get_time():
     # Get the current date and time
     now = datetime.now()

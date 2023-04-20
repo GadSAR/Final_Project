@@ -14,7 +14,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
 from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights, \
-    model_plot
+    model_plot, model_load_weights_backup, model_load_structure_backup
 
 global model_1
 
@@ -113,9 +113,9 @@ def model1_save_weights():
 
 def model1_load_structure():
     global model_1
-    model_1 = model_load_structure(1)
+    model_1 = model_load_structure_backup(1)
 
 
 def model1_load_weights():
     global model_1
-    model_1 = model_load_weights(model_1, 1)
+    model_1 = model_load_weights_backup(model_1, 1)

@@ -15,7 +15,8 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights, model_plot
+from models.methods import model_save_structure, model_load_structure, model_load_weights, model_save_weights, \
+    model_plot, model_load_structure_backup, model_load_weights_backup
 
 global model_2
 
@@ -128,9 +129,9 @@ def model2_save_weights():
 
 def model2_load_structure():
     global model_2
-    model_2 = model_load_structure(2)
+    model_2 = model_load_structure_backup(2)
 
 
 def model2_load_weights():
     global model_2
-    model_2 = model_load_weights(model_2, 2)
+    model_2 = model_load_weights_backup(model_2, 2)
