@@ -32,7 +32,6 @@ def model1_check(data):
     model1_load_structure()
     model1_load_weights()
     model1_accuracy(x_test1, y_test1)
-    model1_predict(x_test1)
     print(y_test1)
 
 

@@ -1,14 +1,12 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-
-const currentIP = window.location.hostname;
-const API_URL = `http://${currentIP}:8080/ifm_api`;
+import { API_URL_Backend } from '../constants';
 
 class AuthService {
 
   async login(email, password) {
     const response = await axios
-      .post(`${API_URL}/auth/login`, { email, password });
+      .post(`${API_URL_Backend}/auth/login`, { email, password });
     if (response.data.accessToken) {
       localStorage.setItem('user', JSON.stringify(response.data));
       return response.data;
@@ -20,7 +18,7 @@ class AuthService {
 
   async registerAdmin(username, company, email, password) {
     try {
-      const response = await axios.post(`${API_URL}/auth/registerAdmin`, { username, company, email, password });
+      const response = await axios.post(`${API_URL_Backend}/auth/registerAdmin`, { username, company, email, password });
       return response.data;
     } catch (error) {
       throw new Error(`Error during registration: ${error.message}`);
@@ -29,7 +27,7 @@ class AuthService {
 
   async registerUser(username, company, email, password) {
     try {
-      const response = await axios.post(`${API_URL}/auth/registerUser`, { username, company, email, password });
+      const response = await axios.post(`${API_URL_Backend}/auth/registerUser`, { username, company, email, password });
       return response.data;
     } catch (error) {
       throw new Error(`Error during registration: ${error.message}`);
@@ -38,7 +36,7 @@ class AuthService {
 
   async updateUser(email, username, company, c_password, n_password) {
     try {
-      const response = await axios.post(`${API_URL}/auth/updateUser`, { email, username, company, c_password, n_password });
+      const response = await axios.post(`${API_URL_Backend}/auth/updateUser`, { email, username, company, c_password, n_password });
       if (response.data.accessToken) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
@@ -51,7 +49,7 @@ class AuthService {
 
   async updateUserByAdmin(email, n_email, username, company, n_password) {
     try {
-      const response = await axios.post(`${API_URL}/auth/updateUserByAdmin`, { email, n_email, username, company, n_password });
+      const response = await axios.post(`${API_URL_Backend}/auth/updateUserByAdmin`, { email, n_email, username, company, n_password });
       if (response.data.accessToken) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
@@ -63,7 +61,7 @@ class AuthService {
 
   async deleteUserByAdmin(email) {
     try {
-      const response = await axios.post(`${API_URL}/auth/deleteUserByAdmin`, { email })
+      const response = await axios.post(`${API_URL_Backend}/auth/deleteUserByAdmin`, { email })
       return response.data;
     } catch (error) {
       throw new Error(`Error during update: ${error.message}`);
@@ -71,11 +69,25 @@ class AuthService {
   }
 
   async logout() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.accessToken) {
-      axios.post(`${API_URL}/auth/logout`, { accessToken: user.accessToken });
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.accessToken) {
+        axios.post(`${API_URL_Backend}/auth/logout`, { accessToken: user.accessToken });
+      }
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
     }
     localStorage.removeItem('user');
+  }
+
+  async getCompanyUsers(companyName) {
+    try {
+      const response = await fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`);
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
+    }
   }
 
   getCurrentUser() {
@@ -102,5 +114,6 @@ class AuthService {
     return this.getUserRole() === 'ROLE_ADMIN' ? true : false;
   }
 }
+
 
 export default new AuthService();

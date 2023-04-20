@@ -6,9 +6,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
 import { AuthService } from '../../utils';
-
-const currentIP = window.location.hostname;
-const API_URL = `http://${currentIP}:8080/ifm_api`;
+import { API_URL_Backend } from "../../constants"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -77,7 +75,7 @@ const Admin = () => {
             .then(() => {
                 console.log(`User ${email} deleted`);
                 // update the list of users by fetching the latest data from the server
-                fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
+                fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                     .then((res) => res.json())
                     .then((result) => {
                         setUsers(result);
@@ -99,7 +97,7 @@ const Admin = () => {
             AuthService.updateUserByAdmin(user.email, user.n_email, user.name, companyName, user.n_password)
                 .then(() => {
                     console.log(`User ${user.id} updated`);
-                    fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
+                    fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
                             setUsers(result);
@@ -116,7 +114,7 @@ const Admin = () => {
             AuthService.registerUser(user.name, companyName, user.n_email, user.n_password)
                 .then(() => {
                     console.log('New user added');
-                    fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
+                    fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
                             setUsers(result);
@@ -135,7 +133,7 @@ const Admin = () => {
     useEffect(() => {
         // fetch the list of users from the server on initial render
         const companyName = AuthService.getCurrentUser().companies[0];
-        fetch(`${API_URL}/get_company_users?companyName=${companyName}`)
+        fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
             .then((res) => res.json())
             .then((result) => {
                 setUsers(result);

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { AuthService } from './utils';
-import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Navbar, Footer } from './components';
+import { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Navbar, Footer, Predict } from './components';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -50,6 +50,7 @@ const App = () => {
         <Route exact path='/contact-us' element={<ContactUs />} />
         <Route exact path='/about-us' element={<AboutUs />} />
         <Route path='/settings' element={AuthService.getCurrentUser() ? <Settings /> : <Navigate to="/" />} />
+        <Route path='/predict' element={AuthService.getCurrentUser() ? <Predict /> : <Navigate to="/" />} />
         <Route path="/admin" element={AuthService.isAuthenticated() ? <Admin /> : <Navigate to="/" />} />
       </Routes>
     );

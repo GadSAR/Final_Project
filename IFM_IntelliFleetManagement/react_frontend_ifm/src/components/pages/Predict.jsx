@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Container, Paper, Button } from '@material-ui/core';
-
-
-const API_URL = 'http://localhost:8080/ifm_api';
+import { API_URL_Ai } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,37 +14,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Student() {
     const paperStyle = { margin: 'auto', padding: '50px 20px', width: '50%' };
-    const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
-    const [students, setStudents] = useState([]);
+    const [id, setId] = useState('');
+    const [model, setModel] = useState('');
     const classes = useStyles();
 
     const handleClick = (e) => {
         e.preventDefault();
-        const student = { name, address };
-        console.log(student);
-        fetch('${API_URL}/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(student),
-        })
-            .then(() => {
-                console.log('New Student added');
-                fetch(API_URL + '/getAll')
-                    .then((res) => res.json())
-                    .then((result) => {
-                        setStudents(result);
-                        setName('');
-                        setAddress('');
-                    });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+        fetch(`${API_URL_Ai}/model1/predict`)
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
             });
     };
 
     useEffect(() => {
-        fetch(API_URL + '/getAll')
+        fetch(API_URL_Ai + '/getAll')
             .then((res) => res.json())
             .then((result) => {
                 setStudents(result);
@@ -63,37 +45,16 @@ export default function Student() {
                 <form className={classes.root} noValidate autoComplete="off">
                     <TextField
                         id="outlined-basic"
-                        label="Student Name"
+                        label="Model id"
                         variant="outlined"
                         fullWidth
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <TextField
-                        id="outlined-basic"
-                        label="Student Adress"
-                        variant="outlined"
-                        fullWidth
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        value={model}
+                        onChange={(e) => setModel(e.target.value)}
                     />
                     <Button variant="contained" color="secondary" onClick={handleClick}>
-                        Submit
+                        predict with model_{model}
                     </Button>
                 </form>
-            </Paper>
-            <h1>Students</h1>
-
-            <Paper elevation={3} style={paperStyle}>
-                {students.map((student) => (
-                    <Paper elevation={6} style={{ margin: '10px', padding: '15px', textAlign: 'left' }} key={student.id}>
-                        Id: {student.id}
-                        <br />
-                        Name: {student.name}
-                        <br />
-                        Address: {student.address}
-                    </Paper>
-                ))}
             </Paper>
         </Container>
     );

@@ -1,12 +1,24 @@
-from flask import Flask, request, jsonify, render_template, abort
+from flask import Flask, request, jsonify, abort, render_template
+from concurrent.futures import ThreadPoolExecutor
+from flask_cors import CORS
+
+from models.methods import get_data
+from models.model1 import model1_check
 from scripts import model1_predict, model1_build, model2_predict, model2_build, model3_predict
 
-
 app = Flask(__name__)
+CORS(app)
 
 # Define a list of allowed IP addresses and ports
-ALLOWED_IPS = ['127.0.0.1', 'localhost']
 ALLOWED_PORTS = [3000, 5173, 8080, 5000]
+
+# Define the maximum number of threads to use for each model
+MAX_THREADS = 5
+
+# Define a thread pool executor for each model
+model1_executor = ThreadPoolExecutor(max_workers=MAX_THREADS)
+model2_executor = ThreadPoolExecutor(max_workers=MAX_THREADS)
+model3_executor = ThreadPoolExecutor(max_workers=MAX_THREADS)
 
 
 # Define a function to validate incoming requests
@@ -15,14 +27,8 @@ def restrict_access():
     remote_ip = request.remote_addr
     remote_port = request.environ.get('REMOTE_PORT')
 
-    if remote_ip not in ALLOWED_IPS:
-        ALLOWED_IPS.append(remote_ip)
-
     if remote_port not in ALLOWED_PORTS:
         ALLOWED_PORTS.append(remote_port)
-
-    if remote_ip not in ALLOWED_IPS:
-        abort(403)
 
     if remote_port not in ALLOWED_PORTS:
         abort(403)
@@ -33,46 +39,43 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/model2_predict', methods=['GET'])
-def model2_predict():
-    print('hello')
-    model2_predict.main()
-    return jsonify({'message': 'This is a GET request example'})
+# Define the routes for each model
+@app.route('/model1/build', methods=['POST'])
+def model1_build_api():
+    model_id = request.json.get('model_id')
+    future = model1_executor.submit(model1_build, model_id)
+    return jsonify({'message': f'Started building model 1 with ID {model_id}'})
 
 
-# Define a route for POST request
-@app.route('/post_example', methods=['POST'])
-def post_example():
-    # Your code for handling the POST request
-    data = request.get_json()  # Get input data from request
-    # Process the input data and generate a response
-    response = {'message': 'This is a POST request example', 'data': data}
-    return jsonify(response)
+@app.route('/model1/predict')
+def model1_predict_api():
+    # Load the dataset
+    data = get_data()
+    future = model1_executor.submit(model1_check, data)
+    return jsonify({'message': f'Started predicting with model 1'})
 
 
-# Define a route for PUT request
-@app.route('/put_example', methods=['PUT'])
-def put_example():
-    # Your code for handling the PUT request
-    data = request.get_json()  # Get input data from request
-    # Process the input data and generate a response
-    response = {'message': 'This is a PUT request example', 'data': data}
-    return jsonify(response)
+@app.route('/model2/build', methods=['POST'])
+def model2_build_api():
+    model_id = request.json.get('model_id')
+    future = model2_executor.submit(model2_build, model_id)
+    return jsonify({'message': f'Started building model 2 with ID {model_id}'})
 
 
-# Define a route for DELETE request
-@app.route('/delete_example', methods=['DELETE'])
-def delete_example():
-    # Your code for handling the DELETE request
-    return jsonify({'message': 'This is a DELETE request example'})
+@app.route('/model2/predict', methods=['POST'])
+def model2_predict_api():
+    model_id = request.json.get('model_id')
+    input_data = request.json.get('input_data')
+    future = model2_executor.submit(model2_predict, model_id, input_data)
+    return jsonify({'message': f'Started predicting with model 2 ID {model_id}'})
 
 
-# Define a route with a parameter in the URL
-@app.route('/domain/<int:domain_id>', methods=['GET'])
-def get_domain(domain_id):
-    # Your code for handling the GET request with the domain ID parameter
-    return jsonify({'message': f'This is domain ID {domain_id}'})
+@app.route('/model3/predict', methods=['POST'])
+def model3_predict_api():
+    input_data = request.json.get('input_data')
+    future = model3_executor.submit(model3_predict, input_data)
+    return jsonify({'message': 'Started predicting with model 3'})
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000, debug=True)
+    app.run(debug=True)
