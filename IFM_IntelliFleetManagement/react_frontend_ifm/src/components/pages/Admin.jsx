@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
 import { AuthService } from '../../utils';
 
-const API_URL = 'http://localhost:8080/ifm_api';
+const currentIP = window.location.hostname;
+const API_URL = `http://${currentIP}:8080/ifm_api`;
 
 const useStyles = makeStyles((theme) => ({
     root: {
