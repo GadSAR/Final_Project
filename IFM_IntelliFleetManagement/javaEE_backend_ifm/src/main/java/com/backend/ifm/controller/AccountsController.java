@@ -1,14 +1,18 @@
 package com.backend.ifm.controller;
 
 import com.backend.ifm.entity.Company;
+import com.backend.ifm.entity.Info;
 import com.backend.ifm.entity.User;
 import com.backend.ifm.repository.CompanyRepository;
+import com.backend.ifm.repository.InfoRepository;
 import com.backend.ifm.repository.UserRepository;
 import com.backend.ifm.service.AccountsService;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +25,8 @@ public class AccountsController {
     private UserRepository userRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private InfoRepository infoRepository;
 
 
     @GetMapping("/get_company_users")
@@ -28,6 +34,16 @@ public class AccountsController {
         Company company = companyRepository.findByName(companyName);
         if (company != null) {
             return ResponseEntity.ok(userRepository.findAllByCompaniesContaining(company));
+        } else {
+            throw new RuntimeException("Company not found");
+        }
+    }
+
+    @GetMapping("/get_tracks")
+    public ResponseEntity<?> getAllTracks() {
+        List<Info> info = infoRepository.findAll();
+        if (info != null) {
+            return ResponseEntity.ok(info);
         } else {
             throw new RuntimeException("Company not found");
         }

@@ -1,4 +1,4 @@
-package com.backend.ifm;
+package com.example.jmsrabbitmq;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -14,7 +14,7 @@ def main():
     data = get_data()
 
     # Start model
-    epochs = 100
+    epochs = 10
     model2(data, epochs)
 
 

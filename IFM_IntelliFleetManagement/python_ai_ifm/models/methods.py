@@ -15,19 +15,19 @@ from matplotlib import pyplot as plt
 from tensorflow.keras.models import load_model
 
 
-def connect_to_database(database_name):
+def connect_to_database():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
         password="admin",
-        database=database_name  # Replace with the name of the database you want to use
+        database="ifm_database"
     )
 
     return mydb
 
 
 def get_data():
-    mydb = connect_to_database("obd2data")
+    mydb = connect_to_database()
 
     my_cursor = mydb.cursor()
 
@@ -48,7 +48,7 @@ def model_save_structure(file_name, model, model_id):
     model.save(file_path)
 
     # Save the model structure in the database
-    mydb = connect_to_database("obd2_models")
+    mydb = connect_to_database()
     my_cursor = mydb.cursor()
 
     # Open the file in binary mode and read its contents
@@ -73,7 +73,7 @@ def model_save_weights(file_name, model, model_id):
     model.save_weights(file_path)
 
     # Save the model structure in the database
-    mydb = connect_to_database("obd2_models")
+    mydb = connect_to_database()
     my_cursor = mydb.cursor()
 
     # Open the file in binary mode and read its contents
@@ -94,7 +94,7 @@ def model_save_weights(file_name, model, model_id):
 
 def model_load_weights(model, model_id):
     # Save the model structure in the database
-    mydb = connect_to_database("obd2_models")
+    mydb = connect_to_database()
     my_cursor = mydb.cursor()
 
     # Select the file from the database
@@ -119,7 +119,7 @@ def model_load_weights(model, model_id):
 
 def model_load_structure(model_id):
     # Save the model structure in the database
-    mydb = connect_to_database("obd2_models")
+    mydb = connect_to_database()
     my_cursor = mydb.cursor()
 
     # Select the file from the database

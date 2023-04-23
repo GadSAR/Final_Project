@@ -28,18 +28,14 @@ export default function Student() {
     };
 
     useEffect(() => {
-        fetch(API_URL_Ai + '/getAll')
-            .then((res) => res.json())
-            .then((result) => {
-                setStudents(result);
-            });
+
     }, []);
 
     return (
         <Container>
             <Paper elevation={3} style={paperStyle}>
                 <h1 style={{ color: 'blue' }}>
-                    <u>Add Student</u>
+                    <u>Choose a models properties</u>
                 </h1>
 
                 <form className={classes.root} noValidate autoComplete="off">

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, TextField, Typography, InputAdornment, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthService } from '../../utils';
-import { PinDropSharp } from '@material-ui/icons';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +43,7 @@ const Register = () => {
     const [company, setCompany] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleNameChange = (event) => {
@@ -59,6 +60,10 @@ const Register = () => {
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
+    };
+
+    const handlePasswordToggle = () => {
+        setShowPassword(!showPassword);
     };
 
     const handleSubmit = async (event) => {
@@ -136,14 +141,23 @@ const Register = () => {
                         />
                         <TextField
                             label="Password"
-                            variant="outlined"
-                            margin="normal"
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             required
+                            variant="outlined"
+                            margin="normal"
                             aria-invalid="false"
-                            type="password"
                             value={password}
-                            onChange={handlePasswordChange}
+                            onChange={(e) => setPassword(e.target.value)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handlePasswordToggle}>
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <p className='mt-5'>
                             <Button

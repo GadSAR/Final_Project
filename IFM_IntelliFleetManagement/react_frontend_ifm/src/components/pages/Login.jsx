@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, TextField, Typography, InputAdornment, IconButton } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthService } from '../../utils';
@@ -41,6 +42,7 @@ const Login = (props) => {
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleEmailChange = (event) => {
@@ -49,6 +51,10 @@ const Login = (props) => {
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
+    };
+
+    const handlePasswordToggle = () => {
+        setShowPassword(!showPassword);
     };
 
     const handleSubmit = (event) => {
@@ -93,13 +99,22 @@ const Login = (props) => {
                         />
                         <TextField
                             label="Password"
-                            variant="outlined"
-                            margin="normal"
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             required
-                            type="password"
+                            variant="outlined"
+                            margin="normal"
                             value={password}
-                            onChange={handlePasswordChange}
+                            onChange={(e) => setPassword(e.target.value)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handlePasswordToggle}>
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <p className='mt-5'>
                             <Button

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography, TextField, Button } from '@material-ui/core';
+import { API_URL_RabbitMQ } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,10 +28,52 @@ const useStyles = makeStyles((theme) => ({
 
 const ContactUs = () => {
     const classes = useStyles();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [subject, setSubject] = useState('');
+    const [message, setMessage] = useState('');
+
+
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handleSubjectChange = (event) => {
+        setSubject(event.target.value);
+    };
+
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value);
+    };
+
+    const clearFields = () => {
+        setName('');
+        setEmail('');
+        setSubject('');
+        setMessage('');
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Code to handle form submission
+
+        fetch(`${API_URL_RabbitMQ}/contact-us`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, subject, message })
+        })
+            .then((res) => {
+                console.log(res);
+                clearFields();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
 
     return (
@@ -45,6 +88,8 @@ const ContactUs = () => {
                     variant="outlined"
                     className={classes.textField}
                     required
+                    value={name}
+                    onChange={handleNameChange}
                 />
                 <TextField
                     id="email"
@@ -53,6 +98,18 @@ const ContactUs = () => {
                     variant="outlined"
                     className={classes.textField}
                     required
+                    value={email}
+                    onChange={handleEmailChange}
+                />
+                <TextField
+                    id="subject"
+                    label="Subject"
+                    type="text"
+                    variant="outlined"
+                    className={classes.textField}
+                    required
+                    value={subject}
+                    onChange={handleSubjectChange}
                 />
                 <TextField
                     id="message"
@@ -62,6 +119,8 @@ const ContactUs = () => {
                     rows={4}
                     className={classes.textField}
                     required
+                    value={message}
+                    onChange={handleMessageChange}
                 />
                 <Button
                     type="submit"

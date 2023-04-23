@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d6e0da4f-0e8a-427f-8704-e4080d5a1c5d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/entity/Info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/repository/InfoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../python_ai_ifm/restAPI/service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/controller/AccountsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/controller/AccountsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/controller/WebController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/java/com/backend/ifm/controller/WebController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../javaEE_backend_ifm/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/generated/model1_structure.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/generated/model1_structure.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/generated/model1_weights.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/generated/model1_weights.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/models/methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/models/methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/models/model2.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/models/model2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/restAPI/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/restAPI/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/scripts/model1_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/scripts/model1_build.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_ai_ifm/scripts/model2_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python_ai_ifm/scripts/model2_build.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Admin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Admin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/ContactUs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/ContactUs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Predict.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Predict.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/components/pages/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../react_frontend_ifm/src/constants/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../react_frontend_ifm/src/constants/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/Client_Obd2Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/Client_Obd2Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/GUI_IFM_RMI_OBD2S.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/GUI_IFM_RMI_OBD2S.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/ServiceInterfaceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/ServiceInterfaceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/repository/InfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/java/com/example/Obd2scannerEmulator/repository/InfoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../rmi_obd2scannerEmulator_ifm/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="workspaceImportEnabled" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2NVYUT4IW3cDaFSTZJ8g4hqej4v" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/sarga/Desktop/College/Second_year/Final_Project/IFM_IntelliFleetManagement/jms_rabbitmq_ifm",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "spring.configuration.checksum": "f5845c2f374ab432099d7a3cec6c7c37",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.jmsrabbitmq" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="JmsRabbitMqApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="jms_rabbitmq_ifm" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.jmsrabbitmq.JmsRabbitMqApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d6e0da4f-0e8a-427f-8704-e4080d5a1c5d" name="Changes" comment="" />
+      <created>1679750733194</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679750733194</updated>
+      <workItem from="1679750734226" duration="7627000" />
+      <workItem from="1679949151056" duration="1307000" />
+      <workItem from="1679960218771" duration="26000" />
+      <workItem from="1680197596826" duration="1129000" />
+      <workItem from="1680211971807" duration="1660000" />
+      <workItem from="1680976020923" duration="17000" />
+      <workItem from="1681140893459" duration="223000" />
+      <workItem from="1681154379229" duration="1718000" />
+      <workItem from="1682051530320" duration="5103000" />
+      <workItem from="1682276948840" duration="7029000" />
+      <workItem from="1682287310223" duration="89000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

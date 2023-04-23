@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Client_Obd2Scanner {
-    public static void main(String[] args, String carID, String driverID) throws MalformedURLException, NotBoundException, RemoteException, ServerNotActiveException {
+    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, ServerNotActiveException {
 
 
         String message = "Hello ";
@@ -95,7 +95,7 @@ public class Client_Obd2Scanner {
                     System.out.println(serviceInterface.SaveToDatabase(VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
                             ENGINE_LOAD, ENGINE_COOLANT_TEMP, INTAKE_MANIFOLD_PRESSURE, MAF,
                             FUEL_LEVEL, FUEL_PRESSURE, TIMING_ADVANCE, TROUBLE_CODES, ISSUES));
-                    Services.sleep(random.nextInt(5000) + 10000);
+                    //Services.sleep(random.nextInt(5000) + 10000);
                 }
             }
         } catch (IOException e) {

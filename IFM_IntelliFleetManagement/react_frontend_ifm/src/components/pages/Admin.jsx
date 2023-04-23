@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
     Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, TableSortLabel, Tooltip, Box
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit } from '@material-ui/icons';
 import { AuthService } from '../../utils';
 import { API_URL_Backend } from "../../constants"
+import { DataGrid } from '@material-ui/data-grid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     addButton: {
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     editButton: {
         marginRight: theme.spacing(1),
@@ -49,6 +51,7 @@ const Admin = () => {
     const [user, setUser] = useState(initialUser);
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState(false);
+
 
     const handleClose = () => {
         setOpen(false);
@@ -143,6 +146,46 @@ const Admin = () => {
             });
     }, []);
 
+    const columns = [
+        { field: 'name', headerName: 'Username', width: 200 },
+        { field: 'email', headerName: 'Email', width: 250 },
+        {
+            field: 'roles', headerName: 'Role', width: 200,
+            valueGetter: (params) => params.row.roles.length > 0 ? params.row.roles[0].name : 'No role'
+        },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 160,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <>
+                    <IconButton
+                        aria-label="edit"
+                        className={classes.editButton}
+                        onClick={() => handleEdit(params.row)}
+                    >
+                        <Edit />
+                    </IconButton>
+                    <IconButton
+                        aria-label="delete"
+                        className={classes.deleteButton}
+                        onClick={() => handleDelete(params.row.email)}
+                    >
+                        <Delete />
+                    </IconButton>
+                </>
+            )
+        },
+    ];
+
+    const [page, setPage] = useState(0);
+
+    const handlePageChange = (params) => {
+        setPage(params.page);
+    };
+
     return (
         <Container className="pt-8" maxWidth="lg" >
             <Typography variant="h3" gutterBottom >
@@ -156,45 +199,19 @@ const Admin = () => {
             >
                 Add User
             </Button>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="users table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Username</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {users.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell>{user.name}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                                <TableCell>
-                                    {user.roles.length > 0 ? user.roles[0].name : 'No role'} {/* Display the first role name */}
-                                </TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        aria-label="edit"
-                                        className={classes.editButton}
-                                        onClick={() => handleEdit(user)}
-                                    >
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton
-                                        aria-label="delete"
-                                        className={classes.deleteButton}
-                                        onClick={() => handleDelete(user.email)}
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Box height={500}>
+                <DataGrid
+                    rows={users}
+                    columns={columns}
+                    pageSize={5}
+                    pagination
+                    disableSelectionOnClick
+                    autoHeight
+                    page={page}
+                    onPageChange={handlePageChange}
+                    rowsPerPageOptions={[5, 10, 20, 30]}
+                />
+            </Box>
             <Dialog
                 open={open}
                 onClose={handleClose}

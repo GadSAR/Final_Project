@@ -4,6 +4,8 @@ from flask_cors import CORS
 
 from models.methods import get_data
 from models.model1 import model1_check
+from models.model2 import model2_check
+from models.model3 import model3
 from scripts import model1_predict, model1_build, model2_predict, model2_build, model3_predict
 
 app = Flask(__name__)
@@ -51,7 +53,9 @@ def model1_build_api():
 def model1_predict_api():
     # Load the dataset
     data = get_data()
-    future = model1_executor.submit(model1_check, data)
+    model1_executor.submit(model1_check, data)
+    model2_executor.submit(model2_check, data)
+    model3_executor.submit(model3, data)
     return jsonify({'message': f'Started predicting with model 1'})
 
 
@@ -64,16 +68,17 @@ def model2_build_api():
 
 @app.route('/model2/predict', methods=['POST'])
 def model2_predict_api():
-    model_id = request.json.get('model_id')
-    input_data = request.json.get('input_data')
-    future = model2_executor.submit(model2_predict, model_id, input_data)
-    return jsonify({'message': f'Started predicting with model 2 ID {model_id}'})
+    # Load the dataset
+    data = get_data()
+    future = model2_executor.submit(model2_predict, data)
+    return jsonify({'message': f'Started predicting with model 2'})
 
 
 @app.route('/model3/predict', methods=['POST'])
 def model3_predict_api():
-    input_data = request.json.get('input_data')
-    future = model3_executor.submit(model3_predict, input_data)
+    # Load the dataset
+    data = get_data()
+    future = model3_executor.submit(model3, data)
     return jsonify({'message': 'Started predicting with model 3'})
 
 
