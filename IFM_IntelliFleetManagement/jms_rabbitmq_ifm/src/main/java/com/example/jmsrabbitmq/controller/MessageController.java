@@ -3,6 +3,7 @@ package com.example.jmsrabbitmq.controller;
 import com.example.jmsrabbitmq.dto.ContactUsForm;
 import com.example.jmsrabbitmq.publisher.RabbitMQProducer;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +18,12 @@ public class MessageController {
         this.rabbitMQProducer = rabbitMQProducer;
     }
 
-    @GetMapping("/publish")
-    public ResponseEntity<String> publishMessage(@RequestParam("message") String message) {
-        rabbitMQProducer.send(message);
-        return ResponseEntity.ok("Message published successfully");
+    @GetMapping("/")
+    public String home(Model model) {
+        return "index";
     }
 
-    @PostMapping("/contact-us")
+    @PostMapping("/contactUs")
     public ResponseEntity<String> publishContactUs(@RequestBody ContactUsForm form) {
         List<String> list = List.of(form.getName(), form.getEmail(), form.getSubject(), form.getMessage());
         rabbitMQProducer.send(list);

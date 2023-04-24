@@ -181,13 +181,19 @@ const Admin = () => {
     ];
 
     const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(5);
 
     const handlePageChange = (params) => {
         setPage(params.page);
     };
 
+    const handlePageSizeChange = (params) => {
+        setPageSize(params.pageSize);
+        setPage(0);
+    };
+
     return (
-        <Container className="pt-8" maxWidth="lg" >
+        <Container className="pt-8" align="center" maxWidth="lg" >
             <Typography variant="h3" gutterBottom >
                 {AuthService.getCurrentUser() ? AuthService.getCurrentUser().companies[0] + '`s Users' : 'Users'}
             </Typography>
@@ -203,13 +209,12 @@ const Admin = () => {
                 <DataGrid
                     rows={users}
                     columns={columns}
-                    pageSize={5}
+                    pageSize={pageSize}
                     pagination
                     disableSelectionOnClick
                     autoHeight
                     page={page}
                     onPageChange={handlePageChange}
-                    rowsPerPageOptions={[5, 10, 20, 30]}
                 />
             </Box>
             <Dialog

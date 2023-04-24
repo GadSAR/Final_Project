@@ -6,5 +6,7 @@ import Login from './Login';
 import Register from './Register';
 import Settings from './Settings';
 import Predict from './Predict';
+import BusTracks from './BusTracks';
+import Dashboard from './Dashboard';
 
-export { AboutUs as AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict };
+export { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict, BusTracks, Dashboard };

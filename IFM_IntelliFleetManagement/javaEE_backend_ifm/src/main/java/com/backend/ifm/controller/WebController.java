@@ -21,8 +21,4 @@ public class WebController {
         return "index";
     }
 
-    @PostMapping("/contact_us")
-    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
-    }
-
 }

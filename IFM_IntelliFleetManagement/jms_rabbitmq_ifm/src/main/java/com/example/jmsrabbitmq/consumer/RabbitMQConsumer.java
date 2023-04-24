@@ -3,10 +3,10 @@ package com.example.jmsrabbitmq.consumer;
 import com.example.jmsrabbitmq.dto.ContactUsForm;
 import com.example.jmsrabbitmq.publisher.RabbitMQProducer;
 import jakarta.mail.MessagingException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -22,8 +22,10 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void receivedForm(List<String> form) throws MessagingException {
         ContactUsForm contactUsForm = new ContactUsForm(form.get(0), form.get(1), form.get(2), form.get(3));
-        rabbitMQProducer.sendEmail(contactUsForm);
-        logger.info("Received Message From RabbitMQ! Mail sent to: " + form.get(1));
+        rabbitMQProducer.sendEmailToManagement(contactUsForm);
+        logger.info("Received Message From RabbitMQ! Mail sent to IFM's management");
+        rabbitMQProducer.sendEmailToClient(contactUsForm);
+        logger.info("Auto reply sent back to: " + form.get(1));
 
     }
 }

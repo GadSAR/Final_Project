@@ -49,8 +49,8 @@ def model1_build_api():
     return jsonify({'message': f'Started building model 1 with ID {model_id}'})
 
 
-@app.route('/model1/predict')
-def model1_predict_api():
+@app.route('/predict')
+def predict_api():
     # Load the dataset
     data = get_data()
     model1_executor.submit(model1_check, data)

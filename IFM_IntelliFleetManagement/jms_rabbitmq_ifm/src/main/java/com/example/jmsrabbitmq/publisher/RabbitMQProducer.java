@@ -6,14 +6,12 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.List;
 
 @Service
@@ -28,24 +26,56 @@ public class RabbitMQProducer {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(ContactUsForm contactUsForm) throws MessagingException {
-        String from = "sender@gmail.com";
-        String to = "recipient@gmail.com";
+    public void sendEmailToManagement(ContactUsForm contactUsForm) throws MessagingException {
+        String from = contactUsForm.getEmail();
+        String to = "sargad123@gmail.com";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setSubject(contactUsForm.getSubject());
+        helper.setSubject("New IFM's Contact Us Form");
         helper.setFrom(from);
         helper.setTo(to);
 
-        String content = String.format("<b>Dear %s</b>,<br><i>%s:.</i>"
-                + "<br><img src='cid:image001'/>" + "<br><b>Best Regards</b>"
-                , contactUsForm.getName(), contactUsForm.getMessage());
+        String content = String.format("""
+                        <b>The Request is from %s</b>
+                        <br>Subject: %s</br>
+                        <b>%s</b>
+                        <br>Best Regards, %s</br>
+                        """ /*+
+                        "<img src='cid:image001'/>"*/
+                , contactUsForm.getEmail(), contactUsForm.getSubject(), contactUsForm.getMessage(), contactUsForm.getName());
         helper.setText(content, true);
 
-        FileSystemResource resource = new FileSystemResource(new File("picture.png"));
-        helper.addInline("image001", resource);
+        //FileSystemResource resource = new FileSystemResource(new File("picture.png"));
+        //helper.addInline("image001", resource);
+
+        mailSender.send(message);
+    }
+
+    public void sendEmailToClient(ContactUsForm contactUsForm) throws MessagingException {
+        String from = "ifm@gmail.com";
+        String to = contactUsForm.getEmail();
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setSubject("IFM's thank u for your request");
+        helper.setFrom(from);
+        helper.setTo(to);
+
+        String content = String.format("""
+                        <b>Dear %s,</b>
+                        <br>thank u for your request!</br>
+                        <b>we got your request about %s. We will contact u soon.</b>
+                        <br>Best Regards, IFM's management</br>
+                        """ /*+
+                        "<img src='cid:image001'/>"*/
+                , contactUsForm.getName(), contactUsForm.getSubject());
+        helper.setText(content, true);
+
+        //FileSystemResource resource = new FileSystemResource(new File("picture.png"));
+        //helper.addInline("image001", resource);
 
         mailSender.send(message);
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Container, Paper, Button } from '@material-ui/core';
+import { Container, Paper, Button, Typography } from '@material-ui/core';
 import { API_URL_Ai } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,12 +13,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Student() {
-    const paperStyle = { margin: 'auto', padding: '50px 20px', width: '50%' };
-    const [id, setId] = useState('');
-    const [model, setModel] = useState('');
+
     const classes = useStyles();
 
-    const handleClick = (e) => {
+    const handleClick1 = (e) => {
         e.preventDefault();
         fetch(`${API_URL_Ai}/model1/predict`)
             .then((res) => res.json())
@@ -27,29 +25,61 @@ export default function Student() {
             });
     };
 
-    useEffect(() => {
+    const handleClick2 = (e) => {
+        e.preventDefault();
+        fetch(`${API_URL_Ai}/model2/predict`)
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            });
+    };
 
-    }, []);
+    const handleClick3 = (e) => {
+        e.preventDefault();
+        fetch(`${API_URL_Ai}/model3/predict`)
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            });
+    };
+
+    const handleClick4 = (e) => {
+        e.preventDefault();
+        fetch(`${API_URL_Ai}/predict`)
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+            });
+    };
+
 
     return (
-        <Container>
-            <Paper elevation={3} style={paperStyle}>
-                <h1 style={{ color: 'blue' }}>
-                    <u>Choose a models properties</u>
-                </h1>
-
-                <form className={classes.root} noValidate autoComplete="off">
-                    <TextField
-                        id="outlined-basic"
-                        label="Model id"
-                        variant="outlined"
-                        fullWidth
-                        value={model}
-                        onChange={(e) => setModel(e.target.value)}
-                    />
-                    <Button variant="contained" color="secondary" onClick={handleClick}>
-                        predict with model_{model}
-                    </Button>
+        <Container className="pt-8" maxWidth="sm" >
+            <Typography variant="h3" align="center" gutterBottom >
+                Predict using Ai
+            </Typography>
+            <Paper elevation={3} style={classes.Paper}>
+                <form className={classes.root} align="center">
+                    <div className='pt-8'>
+                        <Button variant="contained" color="secondary" onClick={handleClick1}>
+                            predict with model1
+                        </Button>
+                    </div>
+                    <div className='pt-5'>
+                        <Button variant="contained" color="secondary" onClick={handleClick2}>
+                            predict with model2
+                        </Button>
+                    </div>
+                    <div className='pt-5 pb-5'>
+                        <Button variant="contained" color="secondary" onClick={handleClick3}>
+                            predict with model3
+                        </Button>
+                    </div>
+                    <div className='pt-5 pb-5'>
+                        <Button variant="contained" color="secondary" onClick={handleClick4}>
+                            predict with all models
+                        </Button>
+                    </div>
                 </form>
             </Paper>
         </Container>

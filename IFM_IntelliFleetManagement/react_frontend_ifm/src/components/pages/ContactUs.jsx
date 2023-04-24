@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, TextField, Button } from '@material-ui/core';
+import { Container, Typography, TextField, Button, Paper } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { API_URL_RabbitMQ } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,10 +59,25 @@ const ContactUs = () => {
         setMessage('');
     };
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
+    const Alert = (props) => {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch(`${API_URL_RabbitMQ}/contact-us`, {
+        fetch(`${API_URL_RabbitMQ}/contactUs`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,9 +87,15 @@ const ContactUs = () => {
             .then((res) => {
                 console.log(res);
                 clearFields();
+                setSnackbarOpen(true);
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Message sent successfully!');
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Failed to send message.');
             });
     };
 
@@ -116,7 +139,7 @@ const ContactUs = () => {
                     label="Message"
                     variant="outlined"
                     multiline
-                    rows={4}
+                    rows={3}
                     className={classes.textField}
                     required
                     value={message}
@@ -131,6 +154,9 @@ const ContactUs = () => {
                     Send Message
                 </Button>
             </form>
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+                <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+            </Snackbar>
         </Container>
     );
 };
