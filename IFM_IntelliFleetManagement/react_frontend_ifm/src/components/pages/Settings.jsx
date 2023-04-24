@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Paper, Grid, TextField, Button, IconButton, InputAdornment } from '@material-ui/core';
+import { Container, Paper, Grid, TextField, Button, IconButton, InputAdornment, Typography } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import SaveIcon from '@material-ui/icons/Save';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { AuthService } from '../../utils';
@@ -8,10 +10,10 @@ import { AuthService } from '../../utils';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        paddingTop: theme.spacing(4),
     },
     paper: {
-        padding: theme.spacing(6),
+        padding: theme.spacing(5),
     },
     button: {
         marginTop: theme.spacing(2),
@@ -53,17 +55,39 @@ const Settings = () => {
                 .then((response) => {
                     console.log('success update');
                     console.log(response.data);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity('success');
+                    setSnackbarMessage('Settings saved successfully!');
                 })
                 .catch((error) => {
                     console.log(error);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity('error');
+                    setSnackbarMessage('Failed to save settings.');
                 });
             setC_password('');
             setN_password('');
         }
     };
 
+    const Alert = (props) => {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    };
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
     return (
-        <Container maxWidth="md" className={classes.root}>
+        <Container maxWidth="md" align="center" className={classes.root}>
+            <Typography variant="h3" gutterBottom >
+                Settings
+            </Typography>
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={3}>
@@ -139,6 +163,10 @@ const Settings = () => {
                     </Grid>
                 </form>
             </Paper>
+
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+                <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+            </Snackbar>
         </Container>
     );
 };
