@@ -1,4 +1,4 @@
-import CarCanva from "./car";
-import CanvasLoader from "./loader";
+import CarCanva from "./Car";
+import CanvasLoader from "./Loader";
 
 export { CarCanva, CanvasLoader };

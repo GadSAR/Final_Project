@@ -1,0 +1,19 @@
+version: '4.18.0'
+
+services:
+
+  react_frontend_ifm:
+    build: ./react_frontend_ifm
+    container_name: frontend_c
+    ports:
+      - '5173:5173'
+    stdin_open: true
+    tty: true
+
+  javaEE_backend_ifm:
+    build: ./javaEE_backend_ifm
+    container_name: backend_c
+    ports:
+      - '8080:8080'
+    stdin_open: true
+    tty: true

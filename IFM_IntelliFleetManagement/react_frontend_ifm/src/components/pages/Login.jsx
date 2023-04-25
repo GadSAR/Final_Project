@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(8),
     },
     image: {
-        backgroundImage: 'url(https://i.pinimg.com/originals/72/f4/12/72f412e1bb418ed6a93507b3c0825100.gif)',
+        backgroundImage: 'url(https://i.pinimg.com/originals/72/f4/12/72f412e1bb418ed6a93507b3c0825100.gif)', //https://c10.patreonusercontent.com/4/patreon-media/p/post/17572984/eadba2b797554e0ab1f87fc6719fb111/eyJ3Ijo2MjB9/1.gif?token-time=1683676800&token-hash=iEkx4_wEIPZEe2r75iVO8ryPUzXmuZEziwbwS97JXIY%3D
         backgroundRepeat: 'no-repeat',
         backgroundColor: theme.palette.grey[50],
         backgroundSize: 'cover',
