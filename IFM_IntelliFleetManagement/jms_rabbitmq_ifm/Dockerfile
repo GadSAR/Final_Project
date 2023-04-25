@@ -1,19 +1,6 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:20-jdk-alpine
+# jms_rabbitmq_ifm\Dockerfile
+FROM eclipse-temurin:20-jre-alpine
 
-# Set the working directory to /app
-WORKDIR /app
+COPY . .
 
-# Run Maven to build the application
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:resolve
-
-# Copy the current directory contents into the container at /app
-COPY src ./src
-
-# Expose port 8081 for the application
-EXPOSE 8081
-
-# Run the application when the container starts
-CMD ["./mvnw", "spring-boot:run"]
+ENTRYPOINT ["java","-jar","/target/jms_rabbitmq_ifm-0.0.1-SNAPSHOT.jar"]
