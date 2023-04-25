@@ -17,3 +17,19 @@ services:
       - '8080:8080'
     stdin_open: true
     tty: true
+
+  jms_rabbitmq_ifm:
+    build: ./jms_rabbitmq_ifm
+    container_name: jms_c
+    ports:
+      - '8081:8081'
+    stdin_open: true
+    tty: true
+
+  python_ai_ifm:
+    build: ./python_ai_ifm
+    container_name: python_c
+    ports:
+      - '5000:5000'
+    stdin_open: true
+    tty: true
