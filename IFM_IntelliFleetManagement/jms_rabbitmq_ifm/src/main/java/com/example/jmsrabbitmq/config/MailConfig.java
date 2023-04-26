@@ -18,7 +18,7 @@ public class MailConfig {
         ClassLoader classLoader = getClass().getClassLoader();
         try (InputStream inputStream = classLoader.getResourceAsStream("config.properties");) {
             props.load(inputStream);
-
+    
             System.setProperty("EMAIL_USERNAME", props.getProperty("EMAIL_USERNAME"));
             System.setProperty("EMAIL_PASSWORD", props.getProperty("EMAIL_PASSWORD"));
         } catch (IOException e) {
