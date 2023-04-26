@@ -16,7 +16,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("http://*:5173", "http://*:3000")
+                        .allowedOriginPatterns("http://*:5173", "http://*:3000", "http://*:8081")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "X-Bonita-API-Token")
                         .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "X-Bonita-API-Token")
