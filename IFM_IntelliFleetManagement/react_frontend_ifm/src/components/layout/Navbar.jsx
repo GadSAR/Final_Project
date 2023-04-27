@@ -24,11 +24,11 @@ const Navbar = (props) => {
 
   const menuItems = props.loggedIn ? (
     [
-      <NavLink key="dashboard" to="/dashboard" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
+      /*<NavLink key="dashboard" to="/dashboard" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
         <MenuItem onClick={handleMenuClose}>
           Dashboard
         </MenuItem>
-      </NavLink>,
+      </NavLink>,*/
       <NavLink key="bus-tracks" to="/bus-tracks" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
         <MenuItem onClick={handleMenuClose}>
           Bus Tracks

@@ -8,5 +8,6 @@ import Settings from './Settings';
 import Predict from './Predict';
 import BusTracks from './BusTracks';
 import Dashboard from './Dashboard';
+import Error from './Error';
 
-export { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict, BusTracks, Dashboard };
+export { AboutUs, ContactUs, Home, Admin, Login, Register, Settings, Predict, BusTracks, Dashboard, Error };
