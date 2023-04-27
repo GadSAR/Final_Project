@@ -68,7 +68,7 @@ const Login = (props) => {
                 else {
                     console.log(`Logging in with email: ${email}`);
                     props.setLoggedIn(true);
-                    navigate('/settings');
+                    navigate('/bus-tracks');
                 }
             });
     };

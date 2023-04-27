@@ -5,23 +5,21 @@ services:
   react_frontend_ifm:
     build: ./react_frontend_ifm
     container_name: frontend_c
-    ports:
-      - '5173:5173'
     stdin_open: true
     tty: true
+    network_mode: "host"
 
   javaee_backend_ifm:
     build: ./javaee_backend_ifm
     container_name: backend_c
-    ports:
-      - '8080:8080'
     stdin_open: true
     tty: true
+    network_mode: "host"
 
   jms_rabbitmq_ifm:
     build: ./jms_rabbitmq_ifm
     container_name: jms_c
-    ports:
-      - '8081:8081'
     stdin_open: true
     tty: true
+    network_mode: "host"
+
