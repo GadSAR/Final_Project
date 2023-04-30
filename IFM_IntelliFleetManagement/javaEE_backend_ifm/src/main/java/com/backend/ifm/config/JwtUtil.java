@@ -14,7 +14,7 @@ import com.backend.ifm.entity.Role;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "your-secret-key";
+    private final String SECRET_KEY = "ifm-is-the-best";
 
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getName());

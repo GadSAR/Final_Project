@@ -15,15 +15,33 @@ const App = () => {
         const user = await AuthService.getCurrentUser();
         if (user) {
           setLoggedIn(true);
-        }
-        else {
+        } else {
           setLoggedIn(false);
         }
       } catch (error) {
         console.error('Error checking current user:', error);
       }
     };
+    const refreshToken = async () => {
+      try {
+        const user = await AuthService.refreshToken();
+        if (user) {
+          setLoggedIn(true);
+        } else {
+          setLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Error checking current user:', error);
+      }
+    };
+
     checkCurrentUser();
+
+    const intervalId = setInterval(() => {
+      checkCurrentUser();
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
 

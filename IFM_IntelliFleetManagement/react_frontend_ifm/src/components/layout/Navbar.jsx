@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Switch, Avatar, useMediaQuery } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { AuthService } from '../../utils';
-
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem } from "@material-ui/core";
+import { Brightness4, Brightness7, Menu as MenuIcon } from '@material-ui/icons';
+import { useMediaQuery } from '@material-ui/core';
 
 const Navbar = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -84,10 +85,12 @@ const Navbar = (props) => {
           <NavLink style={{ textDecoration: "none", color: "inherit" }} to="/">
             {isSmallScreen ? 'Welcome to I.F.M' : 'Welcome to Intelli Fleet Management'} </NavLink>
         </Typography>
-        <Switch checked={props.darkMode} onChange={props.toggleDarkMode} />
+        <IconButton onClick={props.toggleDarkMode}>
+          {props.darkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
         {isSmallScreen ? (
           <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuClick}>
-            <Avatar />
+            <MenuIcon />
           </IconButton>
         ) : (
           <div style={{ display: "flex" }}>
@@ -98,13 +101,22 @@ const Navbar = (props) => {
             ))}
           </div>
         )}
-        <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose} PaperProps={{
-          style: {
-            width: "200px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
-          },
-        }}>
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+          PaperProps={{
+            style: {
+              width: "200px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
+            },
+          }}
+          MenuListProps={{
+            disablePadding: true,
+          }}
+        >
           {menuItems}
         </Menu>
       </Toolbar>

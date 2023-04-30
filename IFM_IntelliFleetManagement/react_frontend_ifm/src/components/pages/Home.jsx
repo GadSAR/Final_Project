@@ -9,10 +9,10 @@ const Home = () => {
         <CarCanva />
       </div>
       <h1 className="text-4xl sd:text-2xl font-bold mt-6 mb-8 text-center">
-        Welcome to Fleet Management
+        Welcome to Intelli Fleet Management
       </h1>
       <p className="text-xl sd:text-0.5xl mb-8 text-center">
-        Manage your fleet with ease using our advanced fleet management system.
+        Manage your fleet with ease using our advanced fleet management system powered by Ai.
       </p>
       <Link
         to="/login"

@@ -90,6 +90,18 @@ class AuthService {
     }
   }
 
+  async refreshToken() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.refreshToken) {
+      const response = await axios.post(`${API_URL_Backend}/auth/refreshToken`, { refreshToken: user.refreshToken });
+      if (response.data.accessToken) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        return response.data;
+      }
+    }
+    return null;
+  }
+
   getCurrentUser() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.accessToken) {
