@@ -135,7 +135,17 @@ const Login = (props) => {
                                 textDecoration: 'none',
                                 transition: 'color 0.3s ease'
                             }}>
-                                Don't have an account? <span style={{ color: '#c9c9ce' }}>Register here</span>
+                                Don't have an account?
+                            </Link>
+                        </p>
+                        <p align="center">
+                            <Link to="/register" variant="body2" style={{
+                                color: '#757575',
+                                fontSize: '15px',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s ease'
+                            }}>
+                                <span style={{ color: '#c9c9ce' }}>Register here</span>
                             </Link>
                         </p>
                     </form>

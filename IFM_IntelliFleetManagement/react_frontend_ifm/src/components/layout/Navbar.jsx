@@ -7,7 +7,7 @@ import { useMediaQuery } from '@material-ui/core';
 
 const Navbar = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+  const isSmallScreen = useMediaQuery("(max-width: 1000px)");
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);

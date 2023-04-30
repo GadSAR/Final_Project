@@ -171,8 +171,23 @@ const Register = () => {
                             </Button>
                         </p>
                         <p className='mt-3' align="center">
-                            <Link to="/login" variant="body2" style={{ color: '#757575', fontSize: '15px', textDecoration: 'none', transition: 'color 0.3s ease' }}>
-                                Already have an account?  <span style={{ color: '#c9c9ce' }}>Log in here</span>
+                            <Link to="/login" variant="body2" style={{
+                                color: '#757575',
+                                fontSize: '15px',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s ease'
+                            }}>
+                                Already have an account?
+                            </Link>
+                        </p>
+                        <p align="center">
+                            <Link to="/login" variant="body2" style={{
+                                color: '#757575',
+                                fontSize: '15px',
+                                textDecoration: 'none',
+                                transition: 'color 0.3s ease'
+                            }}>
+                                <span style={{ color: '#c9c9ce' }}>Log in here</span>
                             </Link>
                         </p>
                     </form>
