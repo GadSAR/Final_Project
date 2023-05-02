@@ -1,4 +1,4 @@
-import AuthService from './AuthService';
+import AuthService from './BackendService';
 
 
 export { AuthService };
