@@ -1,4 +1,4 @@
-package com.backend.ifm.config;
+package com.backend.ifm.dto;
 
 /*
 The AuthenticationResponse class is a simple Java class (a POJO or Plain Old Java Object)

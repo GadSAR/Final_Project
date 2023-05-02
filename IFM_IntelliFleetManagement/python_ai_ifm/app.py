@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, abort, render_template
 from concurrent.futures import ThreadPoolExecutor
 from flask_cors import CORS
 
-from models.methods import get_data
+from models.methods import get_data, get_last_car_data
 from models.model1 import model1_check
 from models.model2 import model2_check
 from models.model3 import model3
@@ -41,29 +41,28 @@ def home():
     return render_template('index.html')
 
 
-# Define the routes for each model
-@app.route('/model1/build', methods=['POST'])
-def model1_build_api():
-    model_id = request.json.get('model_id')
-    future = model1_executor.submit(model1_build, model_id)
-    return jsonify({'message': f'Started building model 1 with ID {model_id}'})
-
-
 @app.route('/predict')
 def predict_api():
     # Load the dataset
     data = get_data()
-    model1_executor.submit(model1_check, data)
-    model2_executor.submit(model2_check, data)
-    model3_executor.submit(model3, data)
+    model1_check(data)
+    model2_check(data)
+    model3(data)
     return jsonify({'message': f'Started predicting with model 1'})
 
 
-@app.route('/model2/build', methods=['POST'])
-def model2_build_api():
+@app.route('/predict_car', methods=['POST'])
+def model1_predict_all():
+    car_id = request.json.get('carId')
+    data = get_last_car_data(car_id)
+    return jsonify({'message': f'Started building model 1 with ID {car_id}'})
+
+
+@app.route('/model1/predict', methods=['POST'])
+def model1_predict_api():
     model_id = request.json.get('model_id')
-    future = model2_executor.submit(model2_build, model_id)
-    return jsonify({'message': f'Started building model 2 with ID {model_id}'})
+    future = model1_executor.submit(model1_build, model_id)
+    return jsonify({'message': f'Started building model 1 with ID {model_id}'})
 
 
 @app.route('/model2/predict', methods=['POST'])

@@ -1,6 +1,10 @@
 package com.backend.ifm.controller;
 
 import com.backend.ifm.config.*;
+import com.backend.ifm.dto.AuthenticationRequest;
+import com.backend.ifm.dto.AuthenticationResponse;
+import com.backend.ifm.dto.RegisterRequest;
+import com.backend.ifm.dto.UpdateUserRequest;
 import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
@@ -66,6 +70,17 @@ public class AuthenticationController {
     }
 
 
+    @PostMapping("/auth/connect")
+    public ResponseEntity<?> connectUser(@RequestBody AuthenticationRequest authenticationRequest) {
+        ResponseEntity<?> response = authenticateUser(authenticationRequest);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok(accountsService.getUserByEmail(authenticationRequest.getEmail()).getId());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
+
+
     @PostMapping("/auth/registerAdmin")
     public ResponseEntity<?> registerAdmin(@RequestBody RegisterRequest registerRequest) {
         try {
@@ -92,6 +107,7 @@ public class AuthenticationController {
     @PostMapping("/auth/registerUser")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
+
             if (customUserDetailsService.userExists(registerRequest.getEmail())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("User with the provided email already exists");

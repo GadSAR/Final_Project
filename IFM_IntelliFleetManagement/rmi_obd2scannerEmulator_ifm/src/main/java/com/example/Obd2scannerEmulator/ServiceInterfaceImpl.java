@@ -10,7 +10,7 @@ import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import java.util.UUID;
 
 
 public class ServiceInterfaceImpl extends UnicastRemoteObject implements ServiceInterface {
@@ -33,7 +33,7 @@ public class ServiceInterfaceImpl extends UnicastRemoteObject implements Service
     }
 
     @Override
-    public String message(String VEHICLE_ID, Integer SPEED, Double THROTTLE_POS, Integer ENGINE_RPM,
+    public String message(UUID userID, String VEHICLE_ID, Integer SPEED, Double THROTTLE_POS, Integer ENGINE_RPM,
                           Double ENGINE_LOAD, Integer ENGINE_COOLANT_TEMP, Integer INTAKE_MANIFOLD_PRESSURE, Double MAF,
                           Double FUEL_LEVEL, Integer FUEL_PRESSURE, Double TIMING_ADVANCE, String TROUBLE_CODES, Byte ISSUES)
             throws RemoteException, ServerNotActiveException {
@@ -48,7 +48,7 @@ public class ServiceInterfaceImpl extends UnicastRemoteObject implements Service
     }
 
     @Override
-    public String SaveToDatabase(String VEHICLE_ID, Integer SPEED, Double THROTTLE_POS, Integer ENGINE_RPM,
+    public String SaveToDatabase(UUID userID, String VEHICLE_ID, Integer SPEED, Double THROTTLE_POS, Integer ENGINE_RPM,
                                  Double ENGINE_LOAD, Integer ENGINE_COOLANT_TEMP, Integer INTAKE_MANIFOLD_PRESSURE, Double MAF,
                                  Double FUEL_LEVEL, Integer FUEL_PRESSURE, Double TIMING_ADVANCE, String TROUBLE_CODES, Byte ISSUES)
             throws RemoteException, ServerNotActiveException {
@@ -59,6 +59,7 @@ public class ServiceInterfaceImpl extends UnicastRemoteObject implements Service
         System.out.println("Client " + RemoteServer.getClientHost() + ", name: " + VEHICLE_ID + ":" + SPEED);
 
         Info info = context.getBean(Info.class);
+        info.setDRIVER_ID(userID);
         info.setIP(RemoteServer.getClientHost());
         info.setVEHICLE_ID(VEHICLE_ID);
         info.setSPEED(SPEED);
@@ -75,13 +76,9 @@ public class ServiceInterfaceImpl extends UnicastRemoteObject implements Service
         info.setISSUES(ISSUES);
         info.setTIME(now);
 
-        // goto the DemoApplication object ...
         RMIApplication rmiDbApplication = context.getBean(RMIApplication.class);
-        //... and use customerRepository.save(customer); -> method
-        // this will save also the product record, because customer has the product info
         rmiDbApplication.infoRepository.save(info);
 
-        // only for singleton scope
         BeanFactory beanFactory = context.getBeanFactory();
         ((DefaultListableBeanFactory) beanFactory).destroySingleton("info");
 

@@ -9,10 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 // @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Table(name = "obd2scannerdata")
+@Table(name = "obd2scannerdata2")
 @Lazy
 @Getter
 @Setter
@@ -32,7 +33,10 @@ public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(nullable = false)
-    private Long ID;
+    private int ID;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID DRIVER_ID;
 
     @Column
     LocalDateTime TIME;

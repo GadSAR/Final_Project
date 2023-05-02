@@ -10,20 +10,63 @@ import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.UUID;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public class Client_Obd2Scanner {
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, ServerNotActiveException {
 
+    private final UUID userID;
+    private final String carID;
+
+    Client_Obd2Scanner(String email, String password, String carID) throws ServerNotActiveException, NotBoundException, IOException {
+        this.carID = carID;
+        userID = connectUser(email, password);
+        startClient();
+    }
+
+    public UUID connectUser(String email, String password) {
+        try {
+            // Create an HttpClient object
+            HttpClient client = HttpClient.newHttpClient();
+
+            // Create a JSON request body
+            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
+
+            // Create a HttpRequest object with the endpoint URL and request body
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/ifm_api/auth/connect"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Print the response body
+            String responseBody = response.body();
+            String uuidString = responseBody.replaceAll("\"", "");
+            UUID userID = UUID.fromString(uuidString);
+            System.out.println(userID);
+            return userID;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void startClient() throws NotBoundException, ServerNotActiveException, IOException {
 
         String message = "Hello ";
         System.out.println("Sending to server " + message);
         ServiceInterface serviceInterface = (ServiceInterface)
-                // JNDI - lookup by name - Naming.lookup() method
                 Naming.lookup("rmi://localhost:6002/hello");
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter VEHICLE_ID (car1-14): ");
-        String nickname = scanner.nextLine();
+        String nickname = "car" + carID;
 
         System.out.println(serviceInterface.connect(message, nickname) + " " + serviceInterface.getClass().getName());
 
@@ -65,8 +108,8 @@ public class Client_Obd2Scanner {
                 }
             }
             if (Index_VEHICLE_ID == -1 || Index_SPEED == -1 || Index_THROTTLE_POS == -1 || Index_ENGINE_RPM == -1
-                || Index_ENGINE_LOAD == -1 || Index_ENGINE_COOLANT_TEMP == -1 || Index_INTAKE_MANIFOLD_PRESSURE == -1
-                || Index_MAF == -1 || Index_FUEL_LEVEL == -1 || Index_FUEL_PRESSURE == -1 || Index_TIMING_ADVANCE == -1 || Index_TROUBLE_CODES == -1) {
+                    || Index_ENGINE_LOAD == -1 || Index_ENGINE_COOLANT_TEMP == -1 || Index_INTAKE_MANIFOLD_PRESSURE == -1
+                    || Index_MAF == -1 || Index_FUEL_LEVEL == -1 || Index_FUEL_PRESSURE == -1 || Index_TIMING_ADVANCE == -1 || Index_TROUBLE_CODES == -1) {
                 System.out.println("The specified columns were not found in the header.");
                 return;
             }
@@ -89,17 +132,15 @@ public class Client_Obd2Scanner {
                     String TROUBLE_CODES = (row[Index_TROUBLE_CODES].isEmpty()) ? "None" : row[Index_TROUBLE_CODES];
                     Byte ISSUES = (byte) (TROUBLE_CODES.equals("None") ? 0 : 1);
 
-                    System.out.println(serviceInterface.message(VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
+                    System.out.println(serviceInterface.message(userID, VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
                             ENGINE_LOAD, ENGINE_COOLANT_TEMP, INTAKE_MANIFOLD_PRESSURE, MAF,
                             FUEL_LEVEL, FUEL_PRESSURE, TIMING_ADVANCE, TROUBLE_CODES, ISSUES));
-                    System.out.println(serviceInterface.SaveToDatabase(VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
+                    System.out.println(serviceInterface.SaveToDatabase(userID, VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
                             ENGINE_LOAD, ENGINE_COOLANT_TEMP, INTAKE_MANIFOLD_PRESSURE, MAF,
                             FUEL_LEVEL, FUEL_PRESSURE, TIMING_ADVANCE, TROUBLE_CODES, ISSUES));
                     Services.sleep(random.nextInt(5000) + 10000);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }

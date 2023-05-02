@@ -42,9 +42,27 @@ def get_data():
     return df
 
 
+def get_last_car_data(carId):
+    mydb = connect_to_database()
+
+    my_cursor = mydb.cursor()
+
+    sql = "SELECT * FROM obd2scannerdata WHERE VEHICLE_ID = " + carId
+
+    my_cursor.execute(sql)
+
+    my_result = my_cursor.fetchall()
+
+    mydb.close()
+
+    df = pd.DataFrame(my_result, columns=my_cursor.column_names)
+
+    return df
+
+
 def model_save_structure(file_name, model, model_id):
     # Save the model structure locally
-    file_path = '../generated/' + file_name
+    file_path = './generated/' + file_name
     model.save(file_path)
 
     # Save the model structure in the database
@@ -69,7 +87,7 @@ def model_save_structure(file_name, model, model_id):
 
 def model_save_weights(file_name, model, model_id):
     # Save the model structure locally
-    file_path = '../generated/' + file_name
+    file_path = './generated/' + file_name
     model.save_weights(file_path)
 
     # Save the model structure in the database
@@ -144,14 +162,14 @@ def model_load_structure(model_id):
 
 
 def model_load_weights_backup(model, model_id):
-    model_weights_path = "../generated/backup/model{model_id}_weights.hdf5".format(model_id=model_id)
+    model_weights_path = "./generated/backup/model{model_id}_weights.hdf5".format(model_id=model_id)
     model.load_weights(model_weights_path)
 
     return model
 
 
 def model_load_structure_backup(model_id):
-    model_structure_path = "../generated/backup/model{model_id}_structure.h5".format(model_id=model_id)
+    model_structure_path = "./generated/backup/model{model_id}_structure.h5".format(model_id=model_id)
     model = load_model(model_structure_path)
 
     return model

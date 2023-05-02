@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Paper, Typography } from '@material-ui/core';
+import { Button, Container, Paper, Typography } from '@material-ui/core';
 import { API_URL_Backend } from '../../constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
+    flexGrow: 1,
+    paddingTop: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(5),
+  },
+  button: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -28,21 +34,16 @@ function DriverDashboard() {
   }, []);
 
   return (
-    <Container className="pt-8" maxWidth="sm" >
+    <Container className={classes.root} maxWidth="md" >
       <Typography variant="h3" align="center" gutterBottom >
-        Driver Dashboard
+        Dashboard
       </Typography>
-      <Paper className={classes.root} elevation={3}>
+      <Paper className="pt-5 pl-4" align="center" elevation={3}>
         <Typography variant="h5" gutterBottom>
           My Info
         </Typography>
         <Typography variant="body1" gutterBottom>
           Name: {driverInfo.name}
-        </Typography>
-      </Paper>
-      <Paper className={classes.root} elevation={3}>
-        <Typography variant="h5" gutterBottom>
-          My Trips
         </Typography>
         {driverInfo.trips && driverInfo.trips.map(trip => (
           <div key={trip.id}>
@@ -60,6 +61,11 @@ function DriverDashboard() {
             </Typography>
           </div>
         ))}
+        <div className={classes.button}>
+          <Button>
+            Mail To Admin
+          </Button>
+        </div>
       </Paper>
     </Container>
   );

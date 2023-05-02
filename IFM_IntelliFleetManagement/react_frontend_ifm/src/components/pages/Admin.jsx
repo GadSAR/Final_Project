@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    IconButton, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, TableSortLabel, Tooltip, Box
+    Box,
+    Button,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    TextField,
+    Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Delete, Edit } from '@material-ui/icons';
+import { Delete, Edit, Mail, Subject } from '@material-ui/icons';
 import { AuthService } from '../../utils';
 import { API_URL_Backend } from "../../constants"
 import { DataGrid } from '@material-ui/data-grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,6 +38,10 @@ const useStyles = makeStyles((theme) => ({
     },
     deleteButton: {
         color: theme.palette.error.main,
+        marginRight: theme.spacing(1),
+    },
+    mailButton: {
+        color: theme.palette.success.main,
     },
     dialog: {
         minWidth: 300,
@@ -45,6 +59,11 @@ const initialUser = {
     n_password: '',
 };
 
+const initialMail = {
+    subject: '',
+    body: '',
+};
+
 const Admin = () => {
     const classes = useStyles();
     const [users, setUsers] = useState([]);
@@ -55,7 +74,14 @@ const Admin = () => {
 
     const handleClose = () => {
         setOpen(false);
+        setOpen2(false);
         setEditing(false);
+        setUser(initialUser);
+        setMail(initialMail);
+    };
+
+    const handleClose2 = () => {
+        setOpen2(false);
         setUser(initialUser);
     };
 
@@ -70,6 +96,19 @@ const Admin = () => {
         setOpen(true);
     };
 
+    const Alert = (props) => {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    };
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
     const handleDelete = (email) => {
         const companyName = AuthService.getCurrentUser().companies[0];
 
@@ -77,6 +116,9 @@ const Admin = () => {
         AuthService.deleteUserByAdmin(email)
             .then(() => {
                 console.log(`User ${email} deleted`);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('success');
+                setSnackbarMessage('User deleted successfully!');
                 // update the list of users by fetching the latest data from the server
                 fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                     .then((res) => res.json())
@@ -89,8 +131,31 @@ const Admin = () => {
             })
             .catch((error) => {
                 console.error('Error:', error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Failed to delete user.');
             });
 
+    };
+
+    const handleSend = () => {
+        const name = user.name;
+        const email = user.email;
+        const subject = mail.subject;
+        const body = mail.body;
+        MailService.sendEmail(name, email, subject, body)
+            .then(() => {
+                console.log(`Email sent to ${email}`);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Email sent successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Failed to send email.');
+            });
     };
 
     const handleSave = () => {
@@ -100,6 +165,9 @@ const Admin = () => {
             AuthService.updateUserByAdmin(user.email, user.n_email, user.name, companyName, user.n_password)
                 .then(() => {
                     console.log(`User ${user.id} updated`);
+                    setSnackbarOpen(true);
+                    setSnackbarSeverity('success');
+                    setSnackbarMessage('User updated successfully!');
                     fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
@@ -107,30 +175,46 @@ const Admin = () => {
                         })
                         .catch((error) => {
                             console.error('Error:', error);
+                            setSnackbarOpen(true);
+                            setSnackbarSeverity('error');
+                            setSnackbarMessage('Failed to update user.');
                         });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
         } else {
-            // send a POST request to the server to create a new user
-            AuthService.registerUser(user.name, companyName, user.n_email, user.n_password)
-                .then(() => {
-                    console.log('New user added');
-                    fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
-                        .then((res) => res.json())
-                        .then((result) => {
-                            setUsers(result);
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+            if (user.n_password === '' || user.n_email === '' || user.name === '' || !/\S+@\S+\.\S+/.test(user.n_email)) {
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Invalid input.');
+            }
+            else {
+                // send a POST request to the server to create a new user
+                AuthService.registerUser(user.name, companyName, user.n_email, user.n_password)
+                    .then(() => {
+                        console.log('New user added');
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity('success');
+                        setSnackbarMessage('User registerd successfully!');
+                        fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
+                            .then((res) => res.json())
+                            .then((result) => {
+                                setUsers(result);
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        setSnackbarOpen(true);
+                        setSnackbarSeverity('error');
+                        setSnackbarMessage('Failed to register user.');
+                    });
+                handleClose();
+            }
         }
-        handleClose();
     };
 
     useEffect(() => {
@@ -156,7 +240,7 @@ const Admin = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 160,
+            width: 180,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -175,6 +259,13 @@ const Admin = () => {
                     >
                         <Delete />
                     </IconButton>
+                    <IconButton
+                        aria-label="mail"
+                        className={classes.mailButton}
+                        onClick={() => handleMail(params.row.email)}
+                    >
+                        <Mail />
+                    </IconButton>
                 </>
             )
         },
@@ -191,6 +282,9 @@ const Admin = () => {
         setPageSize(params.pageSize);
         setPage(0);
     };
+
+    const [open2, setOpen2] = useState(false);
+    const [mail, setMail] = useState(initialMail);
 
     return (
         <Container className="pt-8" align="center" maxWidth="lg" >
@@ -267,6 +361,50 @@ const Admin = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <Dialog
+                open={open2}
+                onClose={handleClose}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title">
+                    Send Mail
+                </DialogTitle>
+                <DialogContent className={classes.dialog}>
+                    <TextField
+                        margin="dense"
+                        name="subject"
+                        label="Subject"
+                        type="text"
+                        required
+                        value={mail.subject}
+                        onChange={(event) => setMail({ ...mail, subject: event.target.value })}
+                        fullWidth
+                    />
+                    <TextField
+                        margin="dense"
+                        name="message"
+                        label="Message"
+                        type="text"
+                        required
+                        value={mail.body}
+                        onChange={(event) => setMail({ ...mail, body: event.target.value })}
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSend} color="primary">
+                        Send
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+                <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+            </Snackbar>
         </Container>
     );
 }

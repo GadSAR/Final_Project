@@ -34,57 +34,46 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const initialInfo = {
-    id: '',
-    time: '',
-    ip: '',
-    vehicle_ID: '',
-    speed: '',
-    throttle_POS: '',
-    engine_RPM: '',
-    engine_LOAD: '',
-    engine_COOLANT_TEMP: '',
-    maf: '',
-    fuel_LEVEL: '',
-    fuel_PRESSURE: '',
-    timing_ADVANCE: '',
-    trouble_CODES: '',
-    issues: '',
-};
-
 const BusTracks = () => {
     const classes = useStyles();
     const [data, setData] = useState([]);
-    const [info, setInfo] = useState(initialInfo);
 
     useEffect(() => {
         // fetch the list of users from the server on initial render
-        fetch(`${API_URL_Backend}/get_tracks`)
-            .then((res) => res.json())
-            .then((result) => {
-                setData(result);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        if (AuthService.isAuthenticated()) {
+            fetch(`${API_URL_Backend}/get_all_tracks`)
+                .then((res) => res.json())
+                .then((result) => {
+                    setData(result);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+        else {
+            fetch(`${API_URL_Backend}/get_user_tracks?driverEmail=${AuthService.getCurrentUser().email}`)
+                .then((res) => res.json())
+                .then((result) => {
+                    setData(result);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }, []);
 
     const columns = [
-        { field: 'id', headerName: 'Id', width: 200 },
-        { field: 'time', headerName: 'Time', width: 200 },
-        { field: 'ip', headerName: 'Ip', width: 200 },
-        { field: 'vehicle_ID', headerName: 'Vehicle Id', width: 200 },
-        { field: 'speed', headerName: 'Speed', width: 200 },
-        { field: 'throttle_POS', headerName: 'Throttle Pos', width: 200 },
-        { field: 'engine_RPM', headerName: 'Engine Rpm', width: 200 },
-        { field: 'engine_LOAD', headerName: 'Engine Load', width: 200 },
-        { field: 'engine_COOLANT_TEMP', headerName: 'Engine Coolant Temp', width: 200 },
-        { field: 'maf', headerName: 'Maf', width: 200 },
-        { field: 'fuel_LEVEL', headerName: 'Fuel Level', width: 200 },
-        { field: 'fuel_PRESSURE', headerName: 'Fuel Pressure', width: 200 },
-        { field: 'timing_ADVANCE', headerName: 'Timing Advance', width: 200 },
-        { field: 'trouble_CODES', headerName: 'Trouble Codes', width: 200 },
-        { field: 'issues', headerName: 'Issues', width: 200 },
+        { field: 'vehicle_ID', headerName: 'Vehicle Id', width: 150 },
+        { field: 'speed', headerName: 'Speed', width: 175 },
+        { field: 'throttle_POS', headerName: 'Throttle Pos', width: 175 },
+        { field: 'engine_RPM', headerName: 'Engine Rpm', width: 175 },
+        { field: 'engine_LOAD', headerName: 'Engine Load', width: 175 },
+        { field: 'engine_COOLANT_TEMP', headerName: 'Engine Temp', width: 175 },
+        { field: 'maf', headerName: 'Maf', width: 175 },
+        { field: 'fuel_LEVEL', headerName: 'Fuel Level', width: 175 },
+        { field: 'fuel_PRESSURE', headerName: 'Fuel Pressure', width: 175 },
+        { field: 'timing_ADVANCE', headerName: 'Timing Advance', width: 175 },
+        { field: 'time', headerName: 'Time', width: 250 },
     ];
 
     const [page, setPage] = useState(0);

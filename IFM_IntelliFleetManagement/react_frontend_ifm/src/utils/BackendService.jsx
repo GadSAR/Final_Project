@@ -90,6 +90,21 @@ class AuthService {
     }
   }
 
+  async getCars() {
+    try {
+      let response;
+      if (this.isAuthenticated()) {
+        response = await fetch(`${API_URL_Backend}/get_all_cars`);
+      } else {
+        response = await fetch(`${API_URL_Backend}/get_user_cars?driverEmail=${this.getCurrentUser().email}`);
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      throw new Error(`Error during update: ${error.message}`);
+    }
+  }
+
   async refreshToken() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.refreshToken) {

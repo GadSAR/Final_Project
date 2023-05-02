@@ -1,4 +1,4 @@
-package com.backend.ifm.config;
+package com.backend.ifm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

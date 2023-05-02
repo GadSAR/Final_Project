@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 // @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Table(name = "obd2scannerdata")
+@Table(name = "obd2scannerdata2")
 @Lazy
 @Getter
 @Setter
@@ -20,6 +21,9 @@ public class Info {
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(nullable = false)
     private Long ID;
+
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID DRIVER_ID;
 
     @Column
     LocalDateTime TIME;

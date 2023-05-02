@@ -1,10 +1,10 @@
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
 """# **Model 3 : Predicts which issue will appear next to the current issue**"""
-import itertools
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------#
 
+import itertools
 
 # For organizing the data
 import pandas as pd
@@ -36,9 +36,6 @@ def model3_data(data):
 def model3_train(trouble_data):
     # Convert the dataset into a pandas DataFrame
     dataset = pd.DataFrame(trouble_data)
-
-    # Print the dataset
-    print(dataset)
 
     # Transform the dataset into a one-hot encoded matrix
     onehot = pd.get_dummies(dataset.apply(pd.Series).stack()).sum(level=0)

@@ -100,7 +100,7 @@ const ContactUs = () => {
     };
 
     return (
-        <Container maxWidth="md" className={classes.root}>
+        <Container maxWidth="sm" className={classes.root}>
             <Typography variant="h2" component="h1" className={classes.title}>
                 Contact Us
             </Typography>

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Container, Paper, Button, Typography } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { Container, Paper, Button, Typography, MenuItem } from '@material-ui/core';
 import { API_URL_Ai } from "../../constants";
+import { AuthService } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,76 +15,129 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Student() {
+export default function Predict() {
 
     const classes = useStyles();
 
-    const handleClick1 = (e) => {
+    const [carId, setCarId] = useState('');
+    const [issue, setIssue] = useState(-1);
+    const [codeIssue, setCodeIssue] = useState('');
+    const [nextIssue, setNextIssue] = useState('');
+
+    const handleClick = (e) => {
         e.preventDefault();
-        fetch(`${API_URL_Ai}/model1/predict`)
+        if (!carId) {
+            setSnackbarOpen(true);
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Please select a car');
+            return;
+        }
+        fetch(`${API_URL_Ai}/predict?carId=${carId}`)
             .then((res) => res.json())
             .then((result) => {
                 console.log(result);
+                setIssue(result.issue);
+                setCodeIssue(result.codeIssue);
+                setNextIssue(result.nextIssue);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Predicted Successfully');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Error in Predicting');
             });
+
     };
 
-    const handleClick2 = (e) => {
-        e.preventDefault();
-        fetch(`${API_URL_Ai}/model2/predict`)
-            .then((res) => res.json())
-            .then((result) => {
-                console.log(result);
-            });
+    const handleCopyResults = () => {
+        const textToCopy = `CarID: ${carId}\nIssue?: ${issue === 1 ? 'yes' : 'no'}\nCode Issue?: ${codeIssue}\nNext Issue?: ${nextIssue}`;
+        navigator.clipboard.writeText(textToCopy);
+        setSnackbarOpen(true);
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Results Copied to Clipboard');
     };
 
-    const handleClick3 = (e) => {
-        e.preventDefault();
-        fetch(`${API_URL_Ai}/model3/predict`)
-            .then((res) => res.json())
-            .then((result) => {
-                console.log(result);
-            });
+    const Alert = (props) => {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+    };
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
     };
 
-    const handleClick4 = (e) => {
-        e.preventDefault();
-        fetch(`${API_URL_Ai}/predict`)
-            .then((res) => res.json())
-            .then((result) => {
-                console.log(result);
+    useEffect(() => {
+        AuthService.getCars()
+            .then((data) => {
+                setCars(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-    };
+    }, []);
+    const [cars, setCars] = useState([]);
 
 
     return (
-        <Container className="pt-8" maxWidth="sm" >
+        <Container className="pt-8" maxWidth="md" >
             <Typography variant="h3" align="center" gutterBottom >
                 Predict using Ai
             </Typography>
             <Paper elevation={3} style={classes.Paper}>
                 <form className={classes.root} align="center">
                     <div className='pt-8'>
-                        <Button variant="contained" color="secondary" onClick={handleClick1}>
-                            predict with model1
-                        </Button>
-                    </div>
-                    <div className='pt-5'>
-                        <Button variant="contained" color="secondary" onClick={handleClick2}>
-                            predict with model2
-                        </Button>
+                        <TextField
+                            select
+                            label="Car ID"
+                            value={carId}
+                            onChange={(e) => setCarId(e.target.value)}
+                            style={{ width: "300px" }}
+                        >
+                            {cars.map((car) => (
+                                <MenuItem key={car} value={car}>
+                                    {car}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </div>
                     <div className='pt-5 pb-5'>
-                        <Button variant="contained" color="secondary" onClick={handleClick3}>
-                            predict with model3
-                        </Button>
-                    </div>
-                    <div className='pt-5 pb-5'>
-                        <Button variant="contained" color="secondary" onClick={handleClick4}>
+                        <Button variant="contained" color="secondary" onClick={handleClick}>
                             predict with all models
                         </Button>
                     </div>
+                    {issue != -1 && (
+                        <div className='pt-5 pb-3'>
+                            <TextField label="Issue?" value={issue === 1 ? 'yes' : 'no'} disabled />
+                        </div>
+                    )}
+                    {issue === 1 && (
+                        <div className='pt-3 pb-3'>
+                            <TextField label="Which issue?" value={codeIssue} disabled />
+                        </div>
+                    )}
+                    {issue === 1 && (
+                        <div className='pt-3 pb-5'>
+                            <TextField label="Next issue?" value={nextIssue} disabled />
+                        </div>
+                    )}
+                    {issue != -1 && (
+                        <Button variant="contained" color="primary" onClick={handleCopyResults}>
+                            Copy Results
+                        </Button>
+                    )}
                 </form>
             </Paper>
-        </Container>
+
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+                <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+            </Snackbar>
+        </Container >
     );
 }

@@ -1,6 +1,6 @@
 package com.backend.ifm.service;
 
-import com.backend.ifm.config.UpdateUserRequest;
+import com.backend.ifm.dto.UpdateUserRequest;
 import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
@@ -105,5 +105,9 @@ public class AccountsService {
         if (userToDelete != null) {
             userRepository.deleteUserByEmail(email);
         }
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
