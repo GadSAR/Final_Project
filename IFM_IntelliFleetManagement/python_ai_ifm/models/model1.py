@@ -35,6 +35,14 @@ def model1_check(data):
     print(y_test1)
 
 
+def model1_prediction(data):
+    global model_1
+    model1_load_structure()
+    model1_load_weights()
+    y_pred = model1_predict(data)
+    return int(y_pred[0])
+
+
 def model1_data(data):
     # Organize the data into x1, y1
     x1 = data.drop(['issues', 'trouble_codes', 'time', 'vehicle_id', 'id', 'ip'], axis=1).values
@@ -95,6 +103,8 @@ def model1_train(x_train1, x_test1, y_train1, y_test1, epochs):
 
 
 def model1_predict(x_pred):
+    print(x_pred.shape)
+    print(x_pred)
     y_pred = model_1.predict(x_pred)
     y_pred = np.round(y_pred).astype(int)
     print(y_pred)

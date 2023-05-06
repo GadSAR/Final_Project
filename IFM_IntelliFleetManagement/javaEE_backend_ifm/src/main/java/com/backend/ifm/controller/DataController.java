@@ -2,13 +2,16 @@ package com.backend.ifm.controller;
 
 import com.backend.ifm.entity.Company;
 import com.backend.ifm.entity.Info;
+import com.backend.ifm.entity.Role;
 import com.backend.ifm.entity.User;
 import com.backend.ifm.repository.CompanyRepository;
 import com.backend.ifm.repository.InfoRepository;
+import com.backend.ifm.repository.RoleRepository;
 import com.backend.ifm.repository.UserRepository;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +27,8 @@ public class DataController {
     private CompanyRepository companyRepository;
     @Autowired
     private InfoRepository infoRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     @GetMapping("/get_company_users")
@@ -83,6 +88,32 @@ public class DataController {
             return ResponseEntity.ok(vehicleIds);
         } else {
             throw new RuntimeException("Driver not found");
+        }
+    }
+
+    @GetMapping("/get_user_lastdrive")
+    public ResponseEntity<?> getLastDrive(@RequestParam("email") String email) {
+        if (userRepository.findByEmail(email) != null) {
+            List<Info> info = infoRepository.findLastByDriverId(userRepository.findByEmail(email).getId(), PageRequest.of(0, 1));
+            return ResponseEntity.ok(info);
+        } else {
+            throw new RuntimeException("Driver not found");
+        }
+    }
+
+    @GetMapping("/get_user_managermail")
+    public ResponseEntity<String> getManagerMail(@RequestParam("email") String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            Company company = user.getCompanies().get(0);
+            List<User> users = userRepository.findAllByCompaniesContains(company);
+            List<User> admin = users.stream()
+                    .filter(u -> u.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN")))
+                    .toList();
+            String adminEmail = admin.get(0).getEmail();
+            return ResponseEntity.ok("\"" + adminEmail + "\"");
+        } else {
+            throw new RuntimeException("User not found");
         }
     }
 

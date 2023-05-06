@@ -14,7 +14,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Delete, Edit, Mail, Subject } from '@material-ui/icons';
 import { AuthService } from '../../utils';
-import { API_URL_Backend } from "../../constants"
+import { API_URL_Backend, API_URL_RabbitMQ } from "../../constants"
 import { DataGrid } from '@material-ui/data-grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -61,7 +61,7 @@ const initialUser = {
 
 const initialMail = {
     subject: '',
-    body: '',
+    message: '',
 };
 
 const Admin = () => {
@@ -78,11 +78,6 @@ const Admin = () => {
         setEditing(false);
         setUser(initialUser);
         setMail(initialMail);
-    };
-
-    const handleClose2 = () => {
-        setOpen2(false);
-        setUser(initialUser);
     };
 
     const handleInputChange = (event) => {
@@ -115,7 +110,7 @@ const Admin = () => {
         // send a DELETE request to the server to delete the user with the given id
         AuthService.deleteUserByAdmin(email)
             .then(() => {
-                console.log(`User ${email} deleted`);
+                console.log(`User deleted`);
                 setSnackbarOpen(true);
                 setSnackbarSeverity('success');
                 setSnackbarMessage('User deleted successfully!');
@@ -138,23 +133,38 @@ const Admin = () => {
 
     };
 
-    const handleSend = () => {
+    const handleMail = () => {
+        event.preventDefault();
+
+        if (!mail.subject || !mail.message) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
         const name = user.name;
-        const email = user.email;
+        const sender = AuthService.getCurrentUser().email;
+        const recipient = user.email;
         const subject = mail.subject;
-        const body = mail.body;
-        MailService.sendEmail(name, email, subject, body)
-            .then(() => {
-                console.log(`Email sent to ${email}`);
+        const message = mail.message;
+
+        fetch(`${API_URL_RabbitMQ}/mailToUser`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, sender, recipient, subject, message })
+        })
+            .then((res) => {
+                setMail(initialMail);
                 setSnackbarOpen(true);
                 setSnackbarSeverity('success');
-                setSnackbarMessage('Email sent successfully!');
+                setSnackbarMessage('Message sent successfully!');
             })
             .catch((error) => {
                 console.error('Error:', error);
                 setSnackbarOpen(true);
                 setSnackbarSeverity('error');
-                setSnackbarMessage('Failed to send email.');
+                setSnackbarMessage('Failed to send message.');
             });
     };
 
@@ -164,7 +174,6 @@ const Admin = () => {
             // send a PUT request to the server to update the user with the given id
             AuthService.updateUserByAdmin(user.email, user.n_email, user.name, companyName, user.n_password)
                 .then(() => {
-                    console.log(`User ${user.id} updated`);
                     setSnackbarOpen(true);
                     setSnackbarSeverity('success');
                     setSnackbarMessage('User updated successfully!');
@@ -193,7 +202,6 @@ const Admin = () => {
                 // send a POST request to the server to create a new user
                 AuthService.registerUser(user.name, companyName, user.n_email, user.n_password)
                     .then(() => {
-                        console.log('New user added');
                         setSnackbarOpen(true);
                         setSnackbarSeverity('success');
                         setSnackbarMessage('User registerd successfully!');
@@ -262,7 +270,7 @@ const Admin = () => {
                     <IconButton
                         aria-label="mail"
                         className={classes.mailButton}
-                        onClick={() => handleMail(params.row.email)}
+                        onClick={() => setOpen2(true)}
                     >
                         <Mail />
                     </IconButton>
@@ -387,8 +395,10 @@ const Admin = () => {
                         label="Message"
                         type="text"
                         required
-                        value={mail.body}
-                        onChange={(event) => setMail({ ...mail, body: event.target.value })}
+                        multiline
+                        minRows={5}
+                        value={mail.message}
+                        onChange={(event) => setMail({ ...mail, message: event.target.value })}
                         fullWidth
                     />
                 </DialogContent>
@@ -396,7 +406,7 @@ const Admin = () => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSend} color="primary">
+                    <Button onClick={handleMail} color="primary">
                         Send
                     </Button>
                 </DialogActions>

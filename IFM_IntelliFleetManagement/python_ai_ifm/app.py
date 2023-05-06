@@ -3,13 +3,13 @@ from concurrent.futures import ThreadPoolExecutor
 from flask_cors import CORS
 
 from models.methods import get_data, get_last_car_data
-from models.model1 import model1_check
-from models.model2 import model2_check
-from models.model3 import model3
+from models.model1 import model1_check, model1_prediction
+from models.model2 import model2_check, model2_prediction
+from models.model3 import model3, model3_prediction
 from scripts import model1_predict, model1_build, model2_predict, model2_build, model3_predict
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=['http://localhost:5173'])
 
 # Define a list of allowed IP addresses and ports
 ALLOWED_PORTS = [3000, 5173, 8080, 5000]
@@ -48,14 +48,20 @@ def predict_api():
     model1_check(data)
     model2_check(data)
     model3(data)
-    return jsonify({'message': f'Started predicting with model 1'})
+    return jsonify({'message': f'Started predicting'})
 
 
-@app.route('/predict_car', methods=['POST'])
+@app.route('/predict_car')
 def model1_predict_all():
-    car_id = request.json.get('carId')
-    data = get_last_car_data(car_id)
-    return jsonify({'message': f'Started building model 1 with ID {car_id}'})
+    car_id = request.args.get('carId')
+    data = get_data()
+    predict_data = get_last_car_data(car_id)
+    is_issue = model1_prediction(predict_data)
+    if is_issue == 1:
+        trouble_code = model2_prediction(predict_data, data)
+        next_issue = model3_prediction(predict_data, data)
+        return jsonify({'is_issue': is_issue, 'trouble_code': trouble_code, 'next_issue': next_issue})
+    return jsonify({'is_issue': is_issue, 'trouble_code': "---", 'next_issue': "---"})
 
 
 @app.route('/model1/predict', methods=['POST'])

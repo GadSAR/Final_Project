@@ -37,6 +37,14 @@ def model2_check(data):
     print(y_test2)
 
 
+def model2_prediction(predict_data, data):
+    global model_2
+    model2_load_structure()
+    model2_load_weights()
+    y_pred = model2_predict(predict_data, data)
+    return y_pred
+
+
 def model2_data(data):
     # Filter the dataset to include only rows where "issues" equals 1
     x2 = data[data['issues'] == 1].copy()
@@ -73,7 +81,7 @@ def model2_structure(input_size, output_size):
 
     # Compile the model
     model_2.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4)
-, metrics=['accuracy'])
+                    , metrics=['accuracy'])
 
     # Print the model summary
     model_2.summary()
@@ -88,12 +96,16 @@ def model2_accuracy(x, y):
     print('Accuracy:', accuracy2)
 
 
-def model2_predict(x_pred):
+def model2_predict(x_pred, data):
+    x, trouble_codes = model2_data(data)
+    print(x_pred.shape)
+    print(x_pred)
     y_pred = model_2.predict(x_pred)
     y_pred = np.round(y_pred).astype(int)
-    print(y_pred)
+    code_pred = trouble_codes.columns[np.argmax(y_pred)]
+    print(code_pred)
 
-    return y_pred
+    return code_pred
 
 
 def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
@@ -104,7 +116,8 @@ def model2_train(x_train2, x_test2, y_train2, y_test2, epochs):
     model2_structure(x_train2.shape[1], num_categories)
 
     # Train the model
-    history2 = model_2.fit(x_train2, y_train2, epochs=epochs, batch_size=32, verbose=1, validation_data=(x_test2, y_test2))
+    history2 = model_2.fit(x_train2, y_train2, epochs=epochs, batch_size=32, verbose=1,
+                           validation_data=(x_test2, y_test2))
 
     # Save model weights
     model2_save_weights()

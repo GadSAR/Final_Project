@@ -1,6 +1,7 @@
 package com.example.jmsrabbitmq.controller;
 
 import com.example.jmsrabbitmq.dto.ContactUsForm;
+import com.example.jmsrabbitmq.dto.MailForm;
 import com.example.jmsrabbitmq.publisher.RabbitMQProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -26,7 +27,22 @@ public class MessageController {
     @PostMapping("/contactUs")
     public ResponseEntity<String> publishContactUs(@RequestBody ContactUsForm form) {
         List<String> list = List.of(form.getName(), form.getEmail(), form.getSubject(), form.getMessage());
-        rabbitMQProducer.send(list);
-        return ResponseEntity.ok("Form published successfully");
+        rabbitMQProducer.send_contactUsToClient(list);
+        rabbitMQProducer.send_contactUsToManagement(list);
+        return ResponseEntity.ok("contactUs published successfully");
+    }
+
+    @PostMapping("/mailToUser")
+    public ResponseEntity<String> publishMailToUser(@RequestBody MailForm form) {
+        List<String> list = List.of(form.getName(), form.getSender(), form.getRecipient(), form.getSubject(), form.getMessage());
+        rabbitMQProducer.send_adminToUser(list);
+        return ResponseEntity.ok("mailToUser published successfully");
+    }
+
+    @PostMapping("/mailToAdmin")
+    public ResponseEntity<String> publishMailToAdmin(@RequestBody MailForm form) {
+        List<String> list = List.of(form.getName(), form.getSender(), form.getRecipient(), form.getSubject(), form.getMessage());
+        rabbitMQProducer.send_userToAdmin(list);
+        return ResponseEntity.ok("mailToAdmin published successfully");
     }
 }

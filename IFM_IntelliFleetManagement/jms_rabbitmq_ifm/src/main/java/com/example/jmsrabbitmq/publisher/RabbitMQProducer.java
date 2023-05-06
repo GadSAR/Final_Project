@@ -1,6 +1,7 @@
 package com.example.jmsrabbitmq.publisher;
 
 import com.example.jmsrabbitmq.dto.ContactUsForm;
+import com.example.jmsrabbitmq.dto.MailForm;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,17 +21,29 @@ import java.util.List;
 public class RabbitMQProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    @Value("${rabbitmq.contact-us-to-management.exchange.name}")
+    private String contactUsToManagement_exchangeName;
+    @Value("${rabbitmq.contact-us-to-management.routing.key}")
+    private String contactUsToManagement_routingKey;
+    @Value("${rabbitmq.contact-us-to-client.exchange.name}")
+    private String contactUsToClient_exchangeName;
+    @Value("${rabbitmq.contact-us-to-client.routing.key}")
+    private String contactUsToClient_routingKey;
+    @Value("${rabbitmq.user-to-admin.exchange.name}")
+    private String userToAdmin_exchangeName;
+    @Value("${rabbitmq.user-to-admin.routing.key}")
+    private String userToAdmin_routingKey;
+    @Value("${rabbitmq.admin-to-user.exchange.name}")
+    private String adminToUser_exchangeName;
+    @Value("${rabbitmq.admin-to-user.routing.key}")
+    private String adminToUser_routingKey;
     private final RabbitTemplate rabbitTemplate;
     @Autowired
     private JavaMailSender mailSender;
 
     public void sendEmailToManagement(ContactUsForm contactUsForm) throws MessagingException {
         String from = contactUsForm.getEmail();
-        String to = "sargad123@gmail.com";
+        String to = "ifmcompany123@gmail.com";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -44,18 +57,15 @@ public class RabbitMQProducer {
                 + "<p style='margin-bottom: 10px;'>Subject: " + contactUsForm.getSubject() + "</p>"
                 + "<p style='margin-bottom: 20px;'>" + contactUsForm.getMessage() + "</p>"
                 + "<p style='font-weight: bold; margin-bottom: 10px;'>Best Regards, " + contactUsForm.getName() + "</p>"
-                + "<img src='cid:image001' style='max-width: 100%; margin-top: 20px;'>"
+                + "<img src='https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1826/Image_1.png' style='max-width: 100%; margin-top: 20px;'>"
                 + "</div>";
         helper.setText(content, true);
-
-        FileSystemResource resource = new FileSystemResource(new File("src/main/resources/picture.png"));
-        helper.addInline("image001", resource);
 
         mailSender.send(message);
     }
 
     public void sendEmailToClient(ContactUsForm contactUsForm) throws MessagingException {
-        String from = "ifm@gmail.com";
+        String from = "ifmcompany123@gmail.com";
         String to = contactUsForm.getEmail();
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -275,8 +285,28 @@ public class RabbitMQProducer {
                        </html>
                        """, true);
 
-        //FileSystemResource resource = new FileSystemResource(new File("picture.png"));
-        //helper.addInline("image001", resource);
+        mailSender.send(message);
+    }
+
+    public void sendEmail(MailForm mailForm) throws MessagingException {
+        String from = mailForm.getSender();
+        String to = mailForm.getRecipient();
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setSubject("New IFM's Mail Form");
+        helper.setFrom(from);
+        helper.setTo(to);
+
+        String content = "<div style='font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;'>"
+                + "<p style='font-weight: bold; margin-bottom: 10px;'>The Request is from " + mailForm.getSender() + "</p>"
+                + "<p style='margin-bottom: 10px;'>Subject: " + mailForm.getSubject() + "</p>"
+                + "<p style='margin-bottom: 20px;'>" + mailForm.getMessage() + "</p>"
+                + "<p style='font-weight: bold; margin-bottom: 10px;'>Best Regards, " + mailForm.getName() + "</p>"
+                + "<img src='https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1826/Image_1.png' style='max-width: 100%; margin-top: 20px;'>"
+                + "</div>";
+        helper.setText(content, true);
 
         mailSender.send(message);
     }
@@ -285,13 +315,23 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void send(String message) {
-        LOGGER.info("Sending message to RabbitMQ: " + message);
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
+    public void send_contactUsToManagement(List<String> form) {
+        LOGGER.info("Sending contactUsToManagement message to RabbitMQ: " + form.get(1));
+        rabbitTemplate.convertAndSend(contactUsToManagement_exchangeName, contactUsToManagement_routingKey, form);
     }
 
-    public void send(List<String> form) {
-        LOGGER.info("Sending message to RabbitMQ: " + form.get(1));
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, form);
+    public void send_contactUsToClient(List<String> form) {
+        LOGGER.info("Sending contactUsToClient message to RabbitMQ: " + form.get(1));
+        rabbitTemplate.convertAndSend(contactUsToClient_exchangeName, contactUsToClient_routingKey, form);
+    }
+
+    public void send_userToAdmin(List<String> form) {
+        LOGGER.info("Sending userToAdmin message to RabbitMQ: " + form.get(2));
+        rabbitTemplate.convertAndSend(userToAdmin_exchangeName, userToAdmin_routingKey, form);
+    }
+
+    public void send_adminToUser(List<String> form) {
+        LOGGER.info("Sending adminToUser message to RabbitMQ: " + form.get(2));
+        rabbitTemplate.convertAndSend(adminToUser_exchangeName, adminToUser_routingKey, form);
     }
 }

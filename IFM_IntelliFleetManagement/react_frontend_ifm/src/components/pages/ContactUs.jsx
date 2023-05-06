@@ -85,7 +85,7 @@ const ContactUs = () => {
             body: JSON.stringify({ name, email, subject, message })
         })
             .then((res) => {
-                console.log(res);
+                console.log("Message sent successfully!");
                 clearFields();
                 setSnackbarOpen(true);
                 setSnackbarSeverity('success');
@@ -100,7 +100,7 @@ const ContactUs = () => {
     };
 
     return (
-        <Container maxWidth="sm" className={classes.root}>
+        <Container maxWidth="md" className={classes.root}>
             <Typography variant="h2" component="h1" className={classes.title}>
                 Contact Us
             </Typography>

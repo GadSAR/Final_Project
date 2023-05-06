@@ -3,11 +3,9 @@ package com.example.jmsrabbitmq.config;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.io.File;
 
 @Configuration
 public class MailConfig {

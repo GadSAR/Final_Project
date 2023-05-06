@@ -13,7 +13,41 @@ import numpy as np
 
 def model3(data):
     trouble_data = model3_data(data)
-    model3_train(trouble_data)
+    return model3_train(trouble_data)
+
+
+def model3_prediction(predict_data, data):
+    rules = model3(data)
+    if len(rules) == 0:
+        return "---"
+    else:
+        return model3_predict(predict_data, rules)
+
+
+def model3_predict(predict_data, rules):
+    # Convert the rules into a DataFrame
+    rules = pd.DataFrame(rules)
+
+    # Generate a list of rules without any nan values
+    cleaned_rules = []
+    for rule in rules.values:
+        if len(rule) > 2 and not np.isnan(rule[2]):
+            cleaned_rules.append(rule)
+
+    # Convert the cleaned rules back into a DataFrame
+    cleaned_rules = pd.DataFrame(cleaned_rules)
+
+    # Filter the DataFrame for rules where the antecedent is the current trouble code
+    filtered_rules = cleaned_rules[cleaned_rules[0] == predict_data]
+
+    # Sort the DataFrame by confidence
+    sorted_rules = filtered_rules.sort_values(by=2, ascending=False)
+
+    # Print the top 3 rules
+    print(sorted_rules.head(3))
+
+    # Return the top rule
+    return sorted_rules.head(1)[1].values[0]
 
 
 def model3_data(data):

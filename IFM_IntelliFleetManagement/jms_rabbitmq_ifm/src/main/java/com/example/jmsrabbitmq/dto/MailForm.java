@@ -10,9 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactUsForm {
+public class MailForm {
     private String name;
-    private String email;
+    private String sender;
+    private String recipient;
     private String subject;
     private String message;
 }

@@ -47,15 +47,17 @@ def get_last_car_data(carId):
 
     my_cursor = mydb.cursor()
 
-    sql = "SELECT * FROM obd2scannerdata WHERE VEHICLE_ID = " + carId
+    sql = "SELECT * FROM obd2scannerdata2 WHERE VEHICLE_ID = %s ORDER BY TIME LIMIT 1"
 
-    my_cursor.execute(sql)
+    my_cursor.execute(sql, (carId,))
 
     my_result = my_cursor.fetchall()
 
     mydb.close()
 
     df = pd.DataFrame(my_result, columns=my_cursor.column_names)
+
+    df.drop(['issues', 'trouble_codes', 'time', 'vehicle_id', 'id', 'ip', 'driver_id'], axis=1, inplace=True)
 
     return df
 

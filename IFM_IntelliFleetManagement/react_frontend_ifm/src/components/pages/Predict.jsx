@@ -32,13 +32,16 @@ export default function Predict() {
             setSnackbarMessage('Please select a car');
             return;
         }
-        fetch(`${API_URL_Ai}/predict?carId=${carId}`)
+        setSnackbarOpen(true);
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Predicting...');
+        fetch(`${API_URL_Ai}/predict_car?carId=${carId}`)
             .then((res) => res.json())
             .then((result) => {
                 console.log(result);
-                setIssue(result.issue);
-                setCodeIssue(result.codeIssue);
-                setNextIssue(result.nextIssue);
+                setIssue(result.is_issue);
+                setCodeIssue(result.trouble_code);
+                setNextIssue(result.next_issue);
                 setSnackbarOpen(true);
                 setSnackbarSeverity('success');
                 setSnackbarMessage('Predicted Successfully');
@@ -109,7 +112,7 @@ export default function Predict() {
                     </div>
                     <div className='pt-5 pb-5'>
                         <Button variant="contained" color="secondary" onClick={handleClick}>
-                            predict with all models
+                            predict
                         </Button>
                     </div>
                     {issue != -1 && (
