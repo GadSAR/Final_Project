@@ -58,7 +58,10 @@ function DriverDashboard() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name: driverName, sender: drivermail, recipient: managermail, subject: mailSubject, message: mailMessage })
+      body: JSON.stringify({
+        name: driverName, sender: drivermail, recipient: managermail,
+        subject: mailSubject, message: mailMessage
+      })
     })
       .then((res) => {
         console.log(res);

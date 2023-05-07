@@ -303,7 +303,7 @@ public class RabbitMQProducer {
                 + "<p style='font-weight: bold; margin-bottom: 10px;'>The Request is from " + mailForm.getSender() + "</p>"
                 + "<p style='margin-bottom: 10px;'>Subject: " + mailForm.getSubject() + "</p>"
                 + "<p style='margin-bottom: 20px;'>" + mailForm.getMessage() + "</p>"
-                + "<p style='font-weight: bold; margin-bottom: 10px;'>Best Regards, " + mailForm.getName() + "</p>"
+                + "<p style='font-weight: bold; margin-bottom: 10px;'>Best Regards!" + "</p>"
                 + "<img src='https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1826/Image_1.png' style='max-width: 100%; margin-top: 20px;'>"
                 + "</div>";
         helper.setText(content, true);

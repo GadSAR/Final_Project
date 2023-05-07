@@ -91,6 +91,11 @@ const Admin = () => {
         setOpen(true);
     };
 
+    const openHandleMail = (selectedUser) => {
+        setUser(selectedUser);
+        setOpen2(true);
+    };
+
     const Alert = (props) => {
         return <MuiAlert elevation={6} variant="filled" {...props} />;
     };
@@ -134,8 +139,6 @@ const Admin = () => {
     };
 
     const handleMail = () => {
-        event.preventDefault();
-
         if (!mail.subject || !mail.message) {
             alert("Please fill in all required fields.");
             return;
@@ -155,6 +158,7 @@ const Admin = () => {
             body: JSON.stringify({ name, sender, recipient, subject, message })
         })
             .then((res) => {
+                setOpen2(false);
                 setMail(initialMail);
                 setSnackbarOpen(true);
                 setSnackbarSeverity('success');
@@ -177,6 +181,7 @@ const Admin = () => {
                     setSnackbarOpen(true);
                     setSnackbarSeverity('success');
                     setSnackbarMessage('User updated successfully!');
+                    handleClose();
                     fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                         .then((res) => res.json())
                         .then((result) => {
@@ -205,6 +210,7 @@ const Admin = () => {
                         setSnackbarOpen(true);
                         setSnackbarSeverity('success');
                         setSnackbarMessage('User registerd successfully!');
+                        handleClose();
                         fetch(`${API_URL_Backend}/get_company_users?companyName=${companyName}`)
                             .then((res) => res.json())
                             .then((result) => {
@@ -220,7 +226,6 @@ const Admin = () => {
                         setSnackbarSeverity('error');
                         setSnackbarMessage('Failed to register user.');
                     });
-                handleClose();
             }
         }
     };
@@ -270,7 +275,7 @@ const Admin = () => {
                     <IconButton
                         aria-label="mail"
                         className={classes.mailButton}
-                        onClick={() => setOpen2(true)}
+                        onClick={() => openHandleMail(params.row)}
                     >
                         <Mail />
                     </IconButton>
@@ -353,7 +358,7 @@ const Admin = () => {
                         margin="dense"
                         name="n_password"
                         label="Password"
-                        type="password"
+                        type="text"
                         required
                         value={user.n_password}
                         onChange={handleInputChange}
@@ -379,6 +384,27 @@ const Admin = () => {
                     Send Mail
                 </DialogTitle>
                 <DialogContent className={classes.dialog}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        name="name"
+                        label="Username"
+                        type="text"
+                        required
+                        value={user.name}
+                        onChange={handleInputChange}
+                        fullWidth
+                    />
+                    <TextField
+                        margin="dense"
+                        name="email"
+                        label="Email"
+                        type="email"
+                        required
+                        value={user.email}
+                        onChange={handleInputChange}
+                        fullWidth
+                    />
                     <TextField
                         margin="dense"
                         name="subject"

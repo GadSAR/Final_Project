@@ -4,12 +4,13 @@ import com.example.jmsrabbitmq.dto.ContactUsForm;
 import com.example.jmsrabbitmq.dto.MailForm;
 import com.example.jmsrabbitmq.publisher.RabbitMQProducer;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class MessageController {
 
@@ -21,7 +22,7 @@ public class MessageController {
 
     @GetMapping("/")
     public String home(Model model) {
-        return "Welcome to IFM's jms rabbitmq";
+        return "index";
     }
 
     @PostMapping("/contactUs")

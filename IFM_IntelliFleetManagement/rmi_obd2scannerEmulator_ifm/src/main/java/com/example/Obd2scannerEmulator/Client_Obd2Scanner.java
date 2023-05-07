@@ -138,7 +138,7 @@ public class Client_Obd2Scanner {
                     System.out.println(serviceInterface.SaveToDatabase(userID, VEHICLE_ID, SPEED, THROTTLE_POS, ENGINE_RPM,
                             ENGINE_LOAD, ENGINE_COOLANT_TEMP, INTAKE_MANIFOLD_PRESSURE, MAF,
                             FUEL_LEVEL, FUEL_PRESSURE, TIMING_ADVANCE, TROUBLE_CODES, ISSUES));
-                    Services.sleep(random.nextInt(5000) + 10000);
+                    //Services.sleep(random.nextInt(5000) + 10000);
                 }
             }
         }

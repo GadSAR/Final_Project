@@ -69,7 +69,7 @@ public class RabbitMQConsumer {
 
     @RabbitListener(queues = "${rabbitmq.admin-to-user.queue.name}")
     public void adminToUser(List<String> form) {
-        MailForm mailForm = new MailForm(form.get(0), form.get(1), form.get(1), form.get(2), form.get(3));
+        MailForm mailForm = new MailForm(form.get(0), form.get(1), form.get(2), form.get(3), form.get(4));
         try {
             rabbitMQProducer.sendEmail(mailForm);
             logger.info("Received Message From RabbitMQ! Mail sent to User");
