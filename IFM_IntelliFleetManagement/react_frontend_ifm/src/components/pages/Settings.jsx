@@ -54,7 +54,6 @@ const Settings = () => {
             AuthService.updateUser(user.email, username, company, c_password, n_password)
                 .then((response) => {
                     console.log('success update');
-                    console.log(response.data);
                     setSnackbarOpen(true);
                     setSnackbarSeverity('success');
                     setSnackbarMessage('Settings saved successfully!');

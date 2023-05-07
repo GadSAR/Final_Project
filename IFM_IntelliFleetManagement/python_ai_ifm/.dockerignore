@@ -1,3 +1,5 @@
 __pycache__
 .idea
-test
+src/resources/test
+venv
+```

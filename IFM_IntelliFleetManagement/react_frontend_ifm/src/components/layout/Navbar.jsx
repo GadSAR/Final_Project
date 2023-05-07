@@ -26,57 +26,39 @@ const Navbar = (props) => {
   const menuItems = props.loggedIn ? (
     [
       !AuthService.isAuthenticated() && (
-        <NavLink key="dashboard" to="/dashboard" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleMenuClose}>
-            Dashboard
-          </MenuItem>
-        </NavLink>
+        <MenuItem key="dashboard" component={NavLink} to="/dashboard" activeclassname="active" onClick={handleMenuClose}>
+          Dashboard
+        </MenuItem>
       ),
-      <NavLink key="bus-tracks" to="/bus-tracks" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Bus Tracks
-        </MenuItem>
-      </NavLink>,
-      <NavLink key="predict" to="/predict" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Predict Issues
-        </MenuItem>
-      </NavLink>,
+      <MenuItem key="bus-tracks" component={NavLink} to="/bus-tracks" activeclassname="active" onClick={handleMenuClose}>
+        Bus Tracks
+      </MenuItem>,
+      <MenuItem key="predict" component={NavLink} to="/predict" activeclassname="active" onClick={handleMenuClose}>
+        Predict Issues
+      </MenuItem>,
       AuthService.isAuthenticated() && (
-        <NavLink key="admin" to="/admin" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleMenuClose}>
-            Admin
-          </MenuItem>
-        </NavLink>
+        <MenuItem key="admin" component={NavLink} to="/admin" activeclassname="active" onClick={handleMenuClose}>
+          Admin
+        </MenuItem>
       ),
-      <NavLink key="settings" to="/settings" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Settings
-        </MenuItem>
-      </NavLink>,
-      <NavLink key="logout" to="/" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleLoggedOut}>
-          Logout
-        </MenuItem>
-      </NavLink>
+      <MenuItem key="settings" component={NavLink} to="/settings" activeclassname="active" onClick={handleMenuClose}>
+        Settings
+      </MenuItem>,
+      <MenuItem key="logout" component={NavLink} to="/" activeclassname="active" onClick={handleLoggedOut}>
+        Logout
+      </MenuItem>
     ]
   ) : (
     [
-      <NavLink key="home" to="/" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Home
-        </MenuItem>
-      </NavLink>,
-      <NavLink key="login" to="/login" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Login
-        </MenuItem>
-      </NavLink>,
-      <NavLink key="register" to="/register" activeclassname="active" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem onClick={handleMenuClose}>
-          Register
-        </MenuItem>
-      </NavLink>
+      <MenuItem key="home" component={NavLink} to="/" activeclassname="active" onClick={handleMenuClose}>
+        Home
+      </MenuItem>,
+      <MenuItem key="login" component={NavLink} to="/login" activeclassname="active" onClick={handleMenuClose}>
+        Login
+      </MenuItem>,
+      <MenuItem key="register" component={NavLink} to="/register" activeclassname="active" onClick={handleMenuClose}>
+        Register
+      </MenuItem>
     ]
   );
 
