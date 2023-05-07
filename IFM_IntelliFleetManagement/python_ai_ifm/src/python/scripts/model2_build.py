@@ -15,7 +15,7 @@ def main():
 
     # Start model
     epochs = 10
-    Model2.model2(data, epochs)
+    Model2.model2_build(data, epochs)
 
 
 if __name__ == '__main__':

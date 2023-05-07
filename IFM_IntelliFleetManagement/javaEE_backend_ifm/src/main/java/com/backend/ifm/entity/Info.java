@@ -2,6 +2,7 @@ package com.backend.ifm.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Component
 // @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Table(name = "obd2scannerdata2")
+@Table(name = "obd2scannerdata")
 @Lazy
 @Getter
 @Setter
@@ -18,9 +19,10 @@ import java.util.UUID;
 public class Info {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(nullable = false)
-    private Long ID;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false, unique = true)
+    private UUID ID;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID DRIVER_ID;

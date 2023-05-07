@@ -31,15 +31,15 @@ class RestAPI:
         def home():
             return render_template('index.html')
 
-        @self.app.route('/predict')
-        def predict_api():
+        @self.app.route('/check')
+        def check_api():
             # Load the dataset
             data = self.data_service.get_data()
             self.init_models()
             self.model1.model1_check(data)
             self.model2.model2_check(data)
             self.model3.model3(data)
-            return jsonify({'message': f'Started predicting'})
+            return jsonify({'message': f'prediction worked'})
 
         @self.app.route('/predict_car')
         def model1_predict_all():
@@ -53,6 +53,28 @@ class RestAPI:
                 next_issue = self.model3.model3_prediction(predict_data, data)
                 return jsonify({'is_issue': is_issue, 'trouble_code': trouble_code, 'next_issue': next_issue})
             return jsonify({'is_issue': is_issue, 'trouble_code': "---", 'next_issue': "---"})
+
+        @self.app.route('/rebuild_models')
+        def models_rebuild():
+            data = self.data_service.get_data()
+            self.init_models()
+            self.model1.model1_build(data)
+            self.model2.model2_build(data)
+            return jsonify({'message': f'Started rebuilding models'})
+
+        @self.app.route('/rebuild_model1')
+        def model1_rebuild():
+            data = self.data_service.get_data()
+            self.init_models()
+            self.model1.model1_build(data)
+            return jsonify({'message': f'Started rebuilding model1'})
+
+        @self.app.route('/rebuild_model2')
+        def model2_rebuild():
+            data = self.data_service.get_data()
+            self.init_models()
+            self.model2.model2_build(data)
+            return jsonify({'message': f'Started rebuilding model2'})
 
     def init_models(self):
         self.model1 = Model1()

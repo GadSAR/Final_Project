@@ -25,7 +25,7 @@ class Model2:
         self.model2_load_structure()
         self.model2_load_weights()
 
-    def model2(self, data, epochs):
+    def model2_build(self, data, epochs):
         x2, y2 = self.model2_data(data)
         x_train2, x_test2, y_train2, y_test2 = self.model2_split_data(x2, y2)
         self.model2_train(x_train2, x_test2, y_train2, y_test2, epochs)

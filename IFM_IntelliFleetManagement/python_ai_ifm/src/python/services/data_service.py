@@ -25,7 +25,7 @@ class DataService:
 
     def get_last_car_data(self, carId):
         my_cursor = self.mydb.cursor()
-        sql = "SELECT * FROM obd2scannerdata2 WHERE VEHICLE_ID = %s ORDER BY TIME LIMIT 1"
+        sql = "SELECT * FROM obd2scannerdata WHERE VEHICLE_ID = %s ORDER BY TIME LIMIT 1"
         my_cursor.execute(sql, (carId,))
         my_result = my_cursor.fetchall()
         df = pd.DataFrame(my_result, columns=my_cursor.column_names)

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.UUID;
 
-public interface InfoRepository extends JpaRepository<Info, Long> {
+public interface InfoRepository extends JpaRepository<Info, UUID> {
     List<Info> findAll();
 
     @Query("SELECT i FROM Info i WHERE i.DRIVER_ID = :driverId")
