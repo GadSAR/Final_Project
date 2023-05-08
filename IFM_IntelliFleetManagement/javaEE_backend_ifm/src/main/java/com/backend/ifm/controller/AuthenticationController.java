@@ -140,7 +140,6 @@ public class AuthenticationController {
         }
     }
 
-
     @PostMapping("/auth/updateUser")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
         User user = accountsService.updateUser(updateUserRequest);
@@ -153,7 +152,6 @@ public class AuthenticationController {
         accountsService.UpdateUserByAdmin(updateUserRequest);
         return ResponseEntity.ok("User updated by admin successfully");
     }
-
 
     @PostMapping("/auth/deleteUserByAdmin")
     public ResponseEntity<?> deleteUserByAdmin(@RequestBody UpdateUserRequest updateUserRequest) {

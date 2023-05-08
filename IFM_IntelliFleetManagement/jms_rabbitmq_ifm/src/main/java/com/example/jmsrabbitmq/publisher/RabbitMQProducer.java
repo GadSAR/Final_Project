@@ -319,17 +319,14 @@ public class RabbitMQProducer {
         LOGGER.info("Sending contactUsToManagement message to RabbitMQ: " + form.get(1));
         rabbitTemplate.convertAndSend(contactUsToManagement_exchangeName, contactUsToManagement_routingKey, form);
     }
-
     public void send_contactUsToClient(List<String> form) {
         LOGGER.info("Sending contactUsToClient message to RabbitMQ: " + form.get(1));
         rabbitTemplate.convertAndSend(contactUsToClient_exchangeName, contactUsToClient_routingKey, form);
     }
-
     public void send_userToAdmin(List<String> form) {
         LOGGER.info("Sending userToAdmin message to RabbitMQ: " + form.get(2));
         rabbitTemplate.convertAndSend(userToAdmin_exchangeName, userToAdmin_routingKey, form);
     }
-
     public void send_adminToUser(List<String> form) {
         LOGGER.info("Sending adminToUser message to RabbitMQ: " + form.get(2));
         rabbitTemplate.convertAndSend(adminToUser_exchangeName, adminToUser_routingKey, form);

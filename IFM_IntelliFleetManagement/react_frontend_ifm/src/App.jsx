@@ -70,7 +70,7 @@ const App = () => {
         <Route exact path='/settings' element={AuthService.getCurrentUser() ? <Settings /> : <Navigate to="/" />} />
         <Route exact path='/predict' element={AuthService.getCurrentUser() ? <Predict /> : <Navigate to="/" />} />
         <Route exact path='/bus-tracks' element={AuthService.getCurrentUser() ? <BusTracks /> : <Navigate to="/" />} />
-        <Route exact path='/dashboard' element={AuthService.getCurrentUser() ? <Dashboard /> : <Navigate to="/" />} />
+        <Route exact path='/dashboard' element={!AuthService.isAuthenticated() ? <Dashboard /> : <Navigate to="/error" />} />
         <Route exact path="/admin" element={AuthService.isAuthenticated() ? <Admin /> : <Navigate to="/error" />} />
         <Route exact path='/error' element={<Error />} />
         <Route path="*" element={<Navigate to="/error" />} />
