@@ -24,9 +24,6 @@ class RestAPI:
             if remote_port not in ALLOWED_PORTS:
                 ALLOWED_PORTS.append(remote_port)
 
-            if remote_port not in ALLOWED_PORTS:
-                abort(403)
-
         @self.app.route('/')
         def home():
             return render_template('index.html')
@@ -82,7 +79,7 @@ class RestAPI:
         self.model3 = Model3()
 
     def run(self):
-        self.app.run()
+        self.app.run(host='192.168.1.20', port=5000)
 
 
 app = RestAPI().app

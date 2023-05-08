@@ -75,8 +75,9 @@ class Model2:
         ])
 
         # Compile the model
-        self.model_2.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4)
-                        , metrics=['accuracy'])
+        self.model_2.compile(loss='categorical_crossentropy',
+                             optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4)
+                             , metrics=['accuracy'])
 
         # Print the model summary
         self.model_2.summary()
