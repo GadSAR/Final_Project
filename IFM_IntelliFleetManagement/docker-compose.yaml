@@ -3,23 +3,50 @@ version: '4.18.0'
 services:
 
   react_frontend_ifm:
+    ports:
+      - 5173:5173
     build: ./react_frontend_ifm
     container_name: frontend_c
     stdin_open: true
     tty: true
-    network_mode: "host"
 
   javaee_backend_ifm:
+    ports:
+      - 8080:8080
     build: ./javaee_backend_ifm
     container_name: backend_c
-    stdin_open: true
-    tty: true
-    network_mode: "host"
+    depends_on:
+      - mysql_ifm
 
   jms_rabbitmq_ifm:
+    ports:
+      - 8081:8081
     build: ./jms_rabbitmq_ifm
     container_name: jms_c
+    depends_on:
+      - rabbitmq_ifm
+
+  python_ai_ifm:
+    ports:
+      - 5000:5000
+    build: ./python_ai_ifm
+    container_name: ai_c
     stdin_open: true
     tty: true
     network_mode: "host"
 
+  mysql_ifm:
+    image: mysql:latest
+    ports:
+      - 3307:3306
+    container_name: mysql_c
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=ifm_database
+
+  rabbitmq_ifm:
+    image: rabbitmq:alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    container_name: rabbitmq_c

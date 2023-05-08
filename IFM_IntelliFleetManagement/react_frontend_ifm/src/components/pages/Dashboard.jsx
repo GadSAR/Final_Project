@@ -145,7 +145,7 @@ function DriverDashboard() {
           <DataGrid rows={lastDrive} columns={columns} pageSize={1} />
         </div>
         <div className={classes.button}>
-          <Button onClick={() => setOpen(true)}>
+          <Button color='primary' onClick={() => setOpen(true)}>
             Mail To Admin
           </Button >
         </div>

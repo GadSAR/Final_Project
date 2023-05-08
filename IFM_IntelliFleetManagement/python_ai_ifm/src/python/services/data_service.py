@@ -14,6 +14,17 @@ class DataService:
             password="admin",
             database="ifm_database"
         )
+
+        my_cursor = mydb.cursor()
+
+        # Create the first table if it does not exist
+        my_cursor.execute(
+            "CREATE TABLE IF NOT EXISTS table1 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)")
+
+        # Create the second table if it does not exist
+        my_cursor.execute(
+            "CREATE TABLE IF NOT EXISTS table2 (id INT AUTO_INCREMENT PRIMARY KEY, address VARCHAR(255), phone VARCHAR(20))")
+
         return mydb
 
     def get_data(self):
