@@ -1,3 +1,12 @@
 # Final_Project
  
-<script src="http://gist-it.appspot.com/https://drive.google.com/file/d/1kM-sNnPW5nhUtp7YPOxz9ephe-1Vbq1I/view?usp=sharing"></script>
+<iframe id="github-iframe" src=""></iframe>
+<script>
+    fetch('https://api.github.com/repos/ileathan/hubot-mubot/contents/src/mubot.coffee')
+        .then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            var iframe = document.getElementById('github-iframe');
+            iframe.src = 'data:text/html;base64,' + encodeURIComponent(data['content']);
+        });
+</script>
