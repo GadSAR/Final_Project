@@ -1,7 +1,9 @@
 
 FROM tomcat:11.0.0-M5-jdk17-temurin-jammy
 
-COPY target/ifm-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/
+WORKDIR /app
+
+COPY target/ifm-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/myapp.war
 
 EXPOSE 8080
 

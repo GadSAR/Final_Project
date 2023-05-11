@@ -1,8 +1,9 @@
 numpy~=1.23.5
-tensorflow~=2.12.0
 scikit-learn~=1.2.2
 pandas~=2.0.1
 matplotlib~=3.7.1
 Flask~=2.3.2
 mysql~=0.0.3
 keras~=2.12.0
+tensorflow~=2.12.0
+```

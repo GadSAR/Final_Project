@@ -1,10 +1,11 @@
-FROM python:3.9-slim-buster
+FROM ubuntu
+
+WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
-RUN apt-get update && apt-get install -y libmysqlclient-dev
-
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y libmysqlclient-dev && \
+    pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
