@@ -17,13 +17,17 @@ class DataService:
 
         my_cursor = mydb.cursor()
 
-        # Create the first table if it does not exist
+        # Create the tables if are not already present.
         my_cursor.execute(
-            "CREATE TABLE IF NOT EXISTS table1 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)")
-
-        # Create the second table if it does not exist
+            "CREATE TABLE IF NOT EXISTS models_structures "
+            "(name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), "
+            "CONSTRAINT models_structures_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))"
+        )
         my_cursor.execute(
-            "CREATE TABLE IF NOT EXISTS table2 (id INT AUTO_INCREMENT PRIMARY KEY, address VARCHAR(255), phone VARCHAR(20))")
+            "CREATE TABLE IF NOT EXISTS models_weights "
+            "(name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), "
+            "CONSTRAINT models_weights_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))"
+        )
 
         return mydb
 
