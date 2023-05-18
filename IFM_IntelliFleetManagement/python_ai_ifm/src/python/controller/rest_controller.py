@@ -13,6 +13,7 @@ class RestAPI:
         CORS(self.app)
         self.model1 = None
         self.model2 = None
+
         self.model3 = None
         self.data_service = DataService()
 

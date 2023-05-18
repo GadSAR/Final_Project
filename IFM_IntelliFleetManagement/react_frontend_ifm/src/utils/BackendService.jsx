@@ -5,6 +5,9 @@ import { API_URL_Backend } from '../constants';
 class AuthService {
 
   async login(email, password) {
+    if (localStorage.getItem('user')) {
+      this.logout();
+    }
     const response = await axios
       .post(`${API_URL_Backend}/auth/login`, { email, password });
     if (response.data.accessToken) {

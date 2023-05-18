@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface InfoRepository extends JpaRepository<Info, UUID> {
+
+    @Query("SELECT i FROM Info i ORDER BY i.VEHICLE_ID ASC")
     List<Info> findAll();
 
-    @Query("SELECT i FROM Info i WHERE i.DRIVER_ID = :driverId")
+    @Query("SELECT i FROM Info i WHERE i.DRIVER_ID = :driverId ORDER BY i.VEHICLE_ID ASC")
     List<Info> findAllByDriverId(@Param("driverId") UUID driverId);
 
     @Query("SELECT i FROM Info i WHERE i.DRIVER_ID = :driverId ORDER BY i.TIME DESC")

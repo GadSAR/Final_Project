@@ -30,15 +30,15 @@ services:
     depends_on:
       - rabbitmq_ifm
 
-  # python_ai_ifm:
-  #    ports:
-  #      - 5000:5000
-  #    build: ./python_ai_ifm
-  #    container_name: ai_c
-  #   stdin_open: true
-  #    tty: true
-  #    network_mode: "host"
-  #
+  python_ai_ifm:
+    ports:
+      - 5000:5000
+    build: ./python_ai_ifm
+    container_name: ai_c
+    stdin_open: true
+    tty: true
+    network_mode: "host"
+  
   mysql_ifm:
     image: mysql:latest
     ports:

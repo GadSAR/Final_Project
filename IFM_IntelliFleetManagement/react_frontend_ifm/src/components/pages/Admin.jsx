@@ -300,7 +300,7 @@ const Admin = () => {
     const [mail, setMail] = useState(initialMail);
 
     return (
-        <Container className="pt-8" align="center" maxWidth="lg" >
+        <Container className="pt-8" align="center" maxWidth="md" >
             <Typography variant="h3" gutterBottom >
                 {AuthService.getCurrentUser() ? AuthService.getCurrentUser().companies[0] + '`s Users' : 'Users'}
             </Typography>

@@ -18,16 +18,16 @@ class DataService:
         my_cursor = mydb.cursor()
 
         # Create the tables if are not already present.
-        my_cursor.execute(
-            "CREATE TABLE IF NOT EXISTS models_structures "
-            "(name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), "
-            "CONSTRAINT models_structures_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))"
-        )
-        my_cursor.execute(
-            "CREATE TABLE IF NOT EXISTS models_weights "
-            "(name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), "
-            "CONSTRAINT models_weights_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))"
-        )
+        my_cursor.execute("""
+            CREATE TABLE IF NOT EXISTS models_structures 
+            (name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), 
+            CONSTRAINT models_structures_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))
+        """)
+        my_cursor.execute("""
+            CREATE TABLE IF NOT EXISTS models_weights 
+            (name varchar(255), data mediumblob, model_id int, time varchar(255), company_id binary(16), 
+            CONSTRAINT models_weights_companies_id_fk FOREIGN KEY (company_id) REFERENCES companies(id))
+        """)
 
         return mydb
 
