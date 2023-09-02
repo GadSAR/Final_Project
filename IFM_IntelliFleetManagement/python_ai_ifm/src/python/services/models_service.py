@@ -108,4 +108,3 @@ class ModelsService:
         plt.plot(history.history['val_accuracy'], label='val_acc')
         plt.legend()
         plt.show()
-        # plt.savefig()
